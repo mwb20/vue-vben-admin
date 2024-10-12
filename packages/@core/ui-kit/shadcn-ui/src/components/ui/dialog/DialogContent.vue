@@ -1,24 +1,27 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { cn } from '@vben-core/shared';
+import { cn } from '@vben-core/shared/utils';
 
-import { Cross2Icon } from '@radix-icons/vue';
+import { X } from 'lucide-vue-next';
 import {
   DialogClose,
   DialogContent,
   type DialogContentEmits,
   type DialogContentProps,
-  DialogOverlay,
   DialogPortal,
   useForwardPropsEmits,
 } from 'radix-vue';
+
+import DialogOverlay from './DialogOverlay.vue';
 
 const props = withDefaults(
   defineProps<
     {
       class?: any;
       closeClass?: any;
+      modal?: boolean;
+      open?: boolean;
       showClose?: boolean;
     } & DialogContentProps
   >(),
@@ -27,7 +30,13 @@ const props = withDefaults(
 const emits = defineEmits<{ close: [] } & DialogContentEmits>();
 
 const delegatedProps = computed(() => {
-  const { class: _, showClose: __, ...delegated } = props;
+  const {
+    class: _,
+    modal: _modal,
+    open: _open,
+    showClose: __,
+    ...delegated
+  } = props;
 
   return delegated;
 });
@@ -43,11 +52,9 @@ defineExpose({
 
 <template>
   <DialogPortal>
-    <DialogOverlay
-      class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 bg-overlay fixed inset-0 z-[1000]"
-      data-dismissable-modal="true"
-      @click="() => emits('close')"
-    />
+    <Transition name="fade">
+      <DialogOverlay v-if="open && modal" @click="() => emits('close')" />
+    </Transition>
     <DialogContent
       ref="contentRef"
       v-bind="forwarded"
@@ -70,7 +77,7 @@ defineExpose({
         "
         @click="() => emits('close')"
       >
-        <Cross2Icon class="h-4 w-4" />
+        <X class="h-4 w-4" />
       </DialogClose>
     </DialogContent>
   </DialogPortal>

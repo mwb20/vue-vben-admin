@@ -30,15 +30,20 @@ const props = withDefaults(
   },
 );
 
+const keyword = ref('');
+const searchInputRef = ref<HTMLInputElement>();
+
 const [Modal, modalApi] = useVbenModal({
   onCancel() {
     modalApi.close();
   },
+  onOpenChange(isOpen: boolean) {
+    if (!isOpen) {
+      keyword.value = '';
+    }
+  },
 });
 const open = modalApi.useStore((state) => state.isOpen);
-
-const keyword = ref('');
-const searchInputRef = ref<HTMLInputElement>();
 
 function handleClose() {
   modalApi.close();
@@ -60,7 +65,7 @@ whenever(open, () => {
 });
 
 const preventDefaultBrowserSearchHotKey = (event: KeyboardEvent) => {
-  if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
+  if (event.key?.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
     event.preventDefault();
   }
 };

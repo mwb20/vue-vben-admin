@@ -110,6 +110,7 @@ const routes: RouteRecordRaw[] = [
             path: '/demos/features/icons',
             component: () => import('#/views/demos/features/icons/index.vue'),
             meta: {
+              icon: 'lucide:annoyed',
               title: $t('page.demos.features.icons'),
             },
           },
@@ -119,6 +120,7 @@ const routes: RouteRecordRaw[] = [
             component: () =>
               import('#/views/demos/features/watermark/index.vue'),
             meta: {
+              icon: 'lucide:tags',
               title: $t('page.demos.features.watermark'),
             },
           },
@@ -171,6 +173,7 @@ const routes: RouteRecordRaw[] = [
             component: () =>
               import('#/views/demos/features/full-screen/index.vue'),
             meta: {
+              icon: 'lucide:fullscreen',
               title: $t('page.demos.features.fullScreen.title'),
             },
           },
@@ -180,7 +183,18 @@ const routes: RouteRecordRaw[] = [
             component: () =>
               import('#/views/demos/features/clipboard/index.vue'),
             meta: {
+              icon: 'lucide:copy',
               title: $t('page.demos.features.clipboard'),
+            },
+          },
+          {
+            name: 'VueQueryDemo',
+            path: '/demos/features/vue-query',
+            component: () =>
+              import('#/views/demos/features/vue-query/index.vue'),
+            meta: {
+              icon: 'lucide:git-pull-request-arrow',
+              title: 'Tanstack Query',
             },
           },
         ],

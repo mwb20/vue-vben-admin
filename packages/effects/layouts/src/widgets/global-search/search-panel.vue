@@ -8,7 +8,7 @@ import { SearchX, X } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { mapTree, traverseTreeValues, uniqueByField } from '@vben/utils';
 import { VbenIcon, VbenScrollbar } from '@vben-core/shadcn-ui';
-import { isHttpUrl } from '@vben-core/shared';
+import { isHttpUrl } from '@vben-core/shared/utils';
 
 import { onKeyStroke, useLocalStorage, useThrottleFn } from '@vueuse/core';
 
@@ -150,7 +150,7 @@ function removeItem(index: number) {
   } else {
     searchHistory.value.splice(index, 1);
   }
-  activeIndex.value = activeIndex.value - 1 >= 0 ? activeIndex.value - 1 : 0;
+  activeIndex.value = Math.max(activeIndex.value - 1, 0);
   scrollIntoView();
 }
 

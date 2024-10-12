@@ -47,6 +47,7 @@ function defineApplicationConfig(userConfigPromise?: DefineApplicationOptions) {
       },
       pwa: true,
       pwaOptions: getDefaultPwaOptions(appTitle),
+      vxeTableLazyImport: true,
       ...envConfig,
       ...application,
     });
@@ -81,7 +82,11 @@ function defineApplicationConfig(userConfigPromise?: DefineApplicationOptions) {
         port,
         warmup: {
           // 预热文件
-          clientFiles: ['./index.html', './src/{views,layouts,router,store}/*'],
+          clientFiles: [
+            './index.html',
+            './bootstrap.ts',
+            './src/{views,layouts,router,store,api}/*',
+          ],
         },
       },
     };
@@ -108,6 +113,7 @@ function createCssOptions(injectGlobalScss = true) {
               }
               return content;
             },
+            api: 'modern-compiler',
           },
         }
       : {},

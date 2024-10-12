@@ -7,6 +7,7 @@ import { computed } from 'vue';
 
 import { Pin, X } from '@vben-core/icons';
 import { VbenContextMenu, VbenIcon } from '@vben-core/shadcn-ui';
+import { deepToRaw } from '@vben-core/shared/utils';
 
 interface Props extends TabsProps {}
 
@@ -46,7 +47,8 @@ const typeWithClass = computed(() => {
 });
 
 const tabsView = computed((): TabConfig[] => {
-  return props.tabs.map((tab) => {
+  return props.tabs.map((_tab) => {
+    const tab = deepToRaw(_tab);
     return {
       ...tab,
       affixTab: !!tab.meta?.affixTab,
@@ -73,7 +75,7 @@ const tabsView = computed((): TabConfig[] => {
         :class="[
           {
             'is-active dark:bg-accent bg-primary/15': tab.key === active,
-            dragable: !tab.affixTab,
+            draggable: !tab.affixTab,
           },
           typeWithClass.content,
         ]"

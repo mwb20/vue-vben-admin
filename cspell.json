@@ -19,6 +19,7 @@
     "intlify",
     "mkdist",
     "mockjs",
+    "vitejs",
     "noopener",
     "noreferrer",
     "nprogress",
@@ -46,7 +47,10 @@
     "vite",
     "echarts",
     "sortablejs",
-    "etag"
+    "etag",
+    "naiveui",
+    "uicons",
+    "iconoir"
   ],
   "ignorePaths": [
     "**/node_modules/**",

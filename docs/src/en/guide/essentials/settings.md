@@ -163,7 +163,7 @@ const defaultPreferences: Preferences = {
     compact: false,
     contentCompact: 'wide',
     defaultAvatar:
-      'https://unpkg.com/@vbenjs/static-source@0.1.6/source/avatar-v1.webp',
+      'https://unpkg.com/@vbenjs/static-source@0.1.7/source/avatar-v1.webp',
     dynamicTitle: true,
     enableCheckUpdates: true,
     enablePreferences: true,
@@ -202,7 +202,7 @@ const defaultPreferences: Preferences = {
   },
   logo: {
     enable: true,
-    source: 'https://unpkg.com/@vbenjs/static-source@0.1.6/source/logo-v1.webp',
+    source: 'https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp',
   },
   navigation: {
     accordion: true,
@@ -226,7 +226,7 @@ const defaultPreferences: Preferences = {
     width: 230,
   },
   tabbar: {
-    dragable: true,
+    draggable: true,
     enable: true,
     height: 36,
     keepAlive: true,
@@ -234,7 +234,6 @@ const defaultPreferences: Preferences = {
     showIcon: true,
     showMaximize: true,
     showMore: true,
-    showRefresh: true,
     styleType: 'chrome',
   },
   theme: {
@@ -262,6 +261,7 @@ const defaultPreferences: Preferences = {
     notification: true,
     sidebarToggle: true,
     themeToggle: true,
+    refresh: true,
   },
 };
 ```
@@ -406,7 +406,7 @@ interface ShortcutKeyPreferences {
 
 interface TabbarPreferences {
   /** Whether dragging of multiple tabs is enabled */
-  dragable: boolean;
+  draggable: boolean;
   /** Whether multiple tabs are enabled */
   enable: boolean;
   /** Tab height */
@@ -421,8 +421,6 @@ interface TabbarPreferences {
   showMaximize: boolean;
   /** Whether to show the more button */
   showMore: boolean;
-  /** Whether to show the refresh button */
-  showRefresh: boolean;
   /** Tab style */
   styleType: TabsStyleType;
 }
@@ -469,6 +467,8 @@ interface WidgetPreferences {
   lockScreen: boolean;
   /** Whether notification widget is displayed */
   notification: boolean;
+  /** Whether to show the refresh button */
+  refresh: boolean;
   /** Whether sidebar show/hide widget is displayed */
   sidebarToggle: boolean;
   /** Whether theme switch widget is displayed */

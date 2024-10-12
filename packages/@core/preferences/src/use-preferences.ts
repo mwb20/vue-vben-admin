@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 
-import { diff } from '@vben-core/shared';
+import { diff } from '@vben-core/shared/utils';
 
 import { preferencesManager } from './preferences';
 import { isDarkTheme } from './update-css-variables';
@@ -26,6 +26,10 @@ function usePreferences() {
    */
   const isDark = computed(() => {
     return isDarkTheme(preferences.theme.mode);
+  });
+
+  const locale = computed(() => {
+    return preferences.app.locale;
   });
 
   const isMobile = computed(() => {
@@ -218,6 +222,7 @@ function usePreferences() {
     isSideNav,
     keepAlive,
     layout,
+    locale,
     preferencesButtonPosition,
     sidebarCollapsed,
     theme,

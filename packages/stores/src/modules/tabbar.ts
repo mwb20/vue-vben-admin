@@ -3,7 +3,11 @@ import type { Router, RouteRecordNormalized } from 'vue-router';
 
 import { toRaw } from 'vue';
 
-import { openWindow, startProgress, stopProgress } from '@vben-core/shared';
+import {
+  openWindow,
+  startProgress,
+  stopProgress,
+} from '@vben-core/shared/utils';
 
 import { acceptHMRUpdate, defineStore } from 'pinia';
 
@@ -205,7 +209,7 @@ export const useTabbarStore = defineStore('core-tabbar', {
         (item) => getTabPath(item) === getTabPath(tab),
       );
 
-      if (index >= 0 && index < this.tabs.length - 1) {
+      if (index !== -1 && index < this.tabs.length - 1) {
         const rightTabs = this.tabs.slice(index + 1);
 
         const paths: string[] = [];
@@ -461,7 +465,7 @@ export const useTabbarStore = defineStore('core-tabbar', {
   persist: [
     // tabs不需要保存在localStorage
     {
-      paths: ['tabs'],
+      pick: ['tabs'],
       storage: sessionStorage,
     },
   ],

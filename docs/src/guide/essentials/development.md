@@ -46,8 +46,6 @@ npm 脚本是项目常见的配置，用于执行一些常见的任务，比如�
 ```json
 {
   "scripts": {
-    // 安装依赖
-    "bootstrap": "pnpm install",
     // 构建项目
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 turbo build",
     // 构建项目并分析
@@ -77,7 +75,7 @@ npm 脚本是项目常见的配置，用于执行一些常见的任务，比如�
     // 检查类型
     "check:type": "turbo run typecheck",
     // 清理项目（删除node_modules、dist、.turbo）等目录
-    "clean": "vsh clean",
+    "clean": "node ./scripts/clean.mjs",
     // 提交代码
     "commit": "czg",
     // 启动项目（默认会运行整个仓库所有包的dev脚本）
@@ -97,7 +95,7 @@ npm 脚本是项目常见的配置，用于执行一些常见的任务，比如�
     // lint 代码
     "lint": "vsh lint",
     // 依赖安装完成之后，执行所有包的stub脚本
-    "postinstall": "turbo run stub",
+    "postinstall": "pnpm -r run stub --if-present",
     // 只允许使用pnpm
     "preinstall": "npx only-allow pnpm",
     // husky的安装
@@ -107,9 +105,9 @@ npm 脚本是项目常见的配置，用于执行一些常见的任务，比如�
     // 包规范检查
     "publint": "vsh publint",
     // 删除所有的node_modules、yarn.lock、package.lock.json，重新安装依赖
-    "reinstall": "pnpm clean --del-lock && pnpm bootstrap",
+    "reinstall": "pnpm clean --del-lock && pnpm install",
     // 运行 vitest 单元测试
-    "test:unit": "vitest",
+    "test:unit": "vitest run --dom",
     // 更新项目依赖
     "update:deps": " pnpm update --latest --recursive",
     // changeset生成提交集
