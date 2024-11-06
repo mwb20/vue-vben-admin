@@ -12,7 +12,7 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { message } from '#/adapter';
+import { message } from '#/adapter/naive';
 import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
@@ -73,11 +73,11 @@ function createRequestClient(baseURL: string) {
     fulfilled: (response) => {
       const { data: responseData, status } = response;
 
-      const { code, data, message: msg } = responseData;
+      const { code, data } = responseData;
       if (status >= 200 && status < 400 && code === 0) {
         return data;
       }
-      throw new Error(`Error ${status}: ${msg}`);
+      throw Object.assign({}, response, { response });
     },
   });
 

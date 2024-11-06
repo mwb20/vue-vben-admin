@@ -22,7 +22,7 @@ import { EmptyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { usePreferences } from '@vben/preferences';
 import { cloneDeep, cn, mergeWithArrayOverride } from '@vben/utils';
-import { VbenLoading } from '@vben-core/shadcn-ui';
+import { VbenHelpTooltip, VbenLoading } from '@vben-core/shadcn-ui';
 
 import { VxeGrid, VxeUI } from 'vxe-table';
 
@@ -41,6 +41,9 @@ const props = withDefaults(defineProps<Props>(), {});
 
 const FORM_SLOT_PREFIX = 'form-';
 
+const TOOLBAR_ACTIONS = 'toolbar-actions';
+const TOOLBAR_TOOLS = 'toolbar-tools';
+
 const gridRef = useTemplateRef<VxeGridInstance>('gridRef');
 
 const state = props.api?.useStore?.();
@@ -51,6 +54,8 @@ const {
   gridClass,
   gridEvents,
   formOptions,
+  tableTitle,
+  tableTitleHelp,
 } = usePriorityValues(props, state);
 
 const { isMobile } = usePreferences();
@@ -79,31 +84,46 @@ const [Form, formApi] = useTableForm({
   wrapperClass: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
 });
 
+const showTableTitle = computed(() => {
+  return !!slots.tableTitle?.() || tableTitle.value;
+});
+
 const showToolbar = computed(() => {
-  return !!slots['toolbar-actions']?.() || !!slots['toolbar-tools']?.();
+  return (
+    !!slots[TOOLBAR_ACTIONS]?.() ||
+    !!slots[TOOLBAR_TOOLS]?.() ||
+    showTableTitle.value
+  );
+});
+
+const toolbarOptions = computed(() => {
+  const slotActions = slots[TOOLBAR_ACTIONS]?.();
+  const slotTools = slots[TOOLBAR_TOOLS]?.();
+
+  if (!showToolbar.value) {
+    return {};
+  }
+  // 强制使用固定的toolbar配置，不允许用户自定义
+  // 减少配置的复杂度，以及后续维护的成本
+  return {
+    toolbarConfig: {
+      slots: {
+        ...(slotActions || showTableTitle.value
+          ? { buttons: TOOLBAR_ACTIONS }
+          : {}),
+        ...(slotTools ? { tools: TOOLBAR_TOOLS } : {}),
+      },
+    },
+  };
 });
 
 const options = computed(() => {
-  const slotActions = slots['toolbar-actions']?.();
-  const slotTools = slots['toolbar-tools']?.();
-
   const globalGridConfig = VxeUI?.getConfig()?.grid ?? {};
-
-  const forceUseToolbarOptions = showToolbar.value
-    ? {
-        toolbarConfig: {
-          slots: {
-            ...(slotActions ? { buttons: 'toolbar-actions' } : {}),
-            ...(slotTools ? { tools: 'toolbar-tools' } : {}),
-          },
-        },
-      }
-    : {};
 
   const mergedOptions: VxeTableGridProps = cloneDeep(
     mergeWithArrayOverride(
       {},
-      forceUseToolbarOptions,
+      toolbarOptions.value,
       toRaw(gridOptions.value),
       globalGridConfig,
     ),
@@ -164,7 +184,7 @@ const delegatedSlots = computed(() => {
   const resultSlots: string[] = [];
 
   for (const key of Object.keys(slots)) {
-    if (!['empty', 'form', 'loading'].includes(key)) {
+    if (!['empty', 'form', 'loading', TOOLBAR_ACTIONS].includes(key)) {
       resultSlots.push(key);
     }
   }
@@ -199,16 +219,19 @@ async function init() {
 
   // form 由 vben-form代替，所以不适配formConfig，这里给出警告
   const formConfig = gridOptions.value?.formConfig;
-  if (formConfig) {
+  // 处理某个页面加载多个Table时，第2个之后的Table初始化报出警告
+  // 因为第一次初始化之后会把defaultGridOptions和gridOptions合并后缓存进State
+  if (formConfig && formConfig.enabled) {
     console.warn(
       '[Vben Vxe Table]: The formConfig in the grid is not supported, please use the `formOptions` props',
     );
   }
-
+  props.api?.setState?.({ gridOptions: defaultGridOptions });
   // form 由 vben-form 代替，所以需要保证query相关事件可以拿到参数
   extendProxyOptions(props.api, defaultGridOptions, () => formApi.form.values);
 }
 
+// formOptions支持响应式
 watch(
   formOptions,
   () => {
@@ -251,6 +274,20 @@ onMounted(() => {
       v-bind="options"
       v-on="events"
     >
+      <!-- 左侧操作区域或者title -->
+      <template v-if="showToolbar" #toolbar-actions="slotProps">
+        <slot v-if="showTableTitle" name="table-title">
+          <div class="mr-1 pl-1 text-[1rem]">
+            {{ tableTitle }}
+            <VbenHelpTooltip v-if="tableTitleHelp" trigger-class="pb-1">
+              {{ tableTitleHelp }}
+            </VbenHelpTooltip>
+          </div>
+        </slot>
+        <slot name="toolbar-actions" v-bind="slotProps"> </slot>
+      </template>
+
+      <!-- 继承默认的slot -->
       <template
         v-for="slotName in delegatedSlots"
         :key="slotName"
@@ -258,6 +295,8 @@ onMounted(() => {
       >
         <slot :name="slotName" v-bind="slotProps"></slot>
       </template>
+
+      <!-- form表单 -->
       <template #form>
         <div v-if="formOptions" class="relative rounded py-3 pb-4">
           <slot name="form">
@@ -267,7 +306,22 @@ onMounted(() => {
                 :key="slotName"
                 #[slotName]="slotProps"
               >
-                <slot :name="slotName" v-bind="slotProps"></slot>
+                <slot
+                  :name="`${FORM_SLOT_PREFIX}${slotName}`"
+                  v-bind="slotProps"
+                ></slot>
+              </template>
+              <template #reset-before="slotProps">
+                <slot name="reset-before" v-bind="slotProps"></slot>
+              </template>
+              <template #submit-before="slotProps">
+                <slot name="submit-before" v-bind="slotProps"></slot>
+              </template>
+              <template #expand-before="slotProps">
+                <slot name="expand-before" v-bind="slotProps"></slot>
+              </template>
+              <template #expand-after="slotProps">
+                <slot name="expand-after" v-bind="slotProps"></slot>
               </template>
             </Form>
           </slot>
@@ -276,11 +330,13 @@ onMounted(() => {
           ></div>
         </div>
       </template>
+      <!-- loading -->
       <template #loading>
         <slot name="loading">
           <VbenLoading :spinning="true" />
         </slot>
       </template>
+      <!-- 统一控状态 -->
       <template #empty>
         <slot name="empty">
           <EmptyIcon class="mx-auto" />

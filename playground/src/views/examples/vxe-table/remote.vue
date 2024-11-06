@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { VxeGridProps } from '#/adapter';
+import type { VxeGridProps } from '#/adapter/vxe-table';
 
 import { Page } from '@vben/common-ui';
 
 import { Button } from 'ant-design-vue';
 
-import { useVbenVxeGrid } from '#/adapter';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getExampleTableApi } from '#/api';
 
 interface RowType {
@@ -31,9 +31,9 @@ const gridOptions: VxeGridProps<RowType> = {
     { field: 'price', title: 'Price' },
     { field: 'releaseDate', formatter: 'formatDateTime', title: 'DateTime' },
   ],
+  exportConfig: {},
   height: 'auto',
   keepSource: true,
-  pagerConfig: {},
   proxyConfig: {
     ajax: {
       query: async ({ page }) => {
@@ -44,14 +44,23 @@ const gridOptions: VxeGridProps<RowType> = {
       },
     },
   },
+  toolbarConfig: {
+    custom: true,
+    export: true,
+    // import: true,
+    refresh: true,
+    zoom: true,
+  },
 };
 
-const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
+const [Grid, gridApi] = useVbenVxeGrid({
+  gridOptions,
+});
 </script>
 
 <template>
   <Page auto-content-height>
-    <Grid>
+    <Grid table-title="数据列表" table-title-help="提示">
       <template #toolbar-tools>
         <Button class="mr-2" type="primary" @click="() => gridApi.query()">
           刷新当前页面

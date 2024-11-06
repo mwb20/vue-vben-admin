@@ -149,10 +149,10 @@ if (enableShortcutKey.value) {
     :title="$t('common.prompt')"
     centered
     content-class="px-8 min-h-10"
-    footer-class="border-none mb-4 mr-4"
+    footer-class="border-none mb-3 mr-3"
     header-class="border-none"
   >
-    {{ $t('widgets.logoutTip') }}
+    {{ $t('ui.widgets.logoutTip') }}
   </LogoutModal>
 
   <DropdownMenu>
@@ -206,7 +206,7 @@ if (enableShortcutKey.value) {
         @click="handleOpenLock"
       >
         <LockKeyhole class="mr-2 size-4" />
-        {{ $t('widgets.lockScreen.title') }}
+        {{ $t('ui.widgets.lockScreen.title') }}
         <DropdownMenuShortcut v-if="enableLockScreenShortcutKey">
           {{ altView }} L
         </DropdownMenuShortcut>

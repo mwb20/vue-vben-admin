@@ -9,8 +9,8 @@ import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
 export type FormLayout = 'horizontal' | 'vertical';
 
 export type BaseFormComponentType =
-  | 'DefaultResetActionButton'
-  | 'DefaultSubmitActionButton'
+  | 'DefaultButton'
+  | 'PrimaryButton'
   | 'VbenCheckbox'
   | 'VbenInput'
   | 'VbenInputPassword'
@@ -289,6 +289,7 @@ export interface FormRenderProps<
 }
 
 export interface ActionButtonOptions extends VbenButtonProps {
+  [key: string]: any;
   content?: string;
   show?: boolean;
 }
@@ -319,7 +320,6 @@ export interface VbenFormProps<
    * 重置按钮参数
    */
   resetButtonOptions?: ActionButtonOptions;
-
   /**
    * 是否显示默认操作按钮
    * @default true
@@ -330,6 +330,12 @@ export interface VbenFormProps<
    * 提交按钮参数
    */
   submitButtonOptions?: ActionButtonOptions;
+
+  /**
+   * 是否在回车时提交表单
+   * @default false
+   */
+  submitOnEnter?: boolean;
 }
 
 export type ExtendedFormApi = {
@@ -341,7 +347,6 @@ export type ExtendedFormApi = {
 export interface VbenFormAdapterOptions<
   T extends BaseFormComponentType = BaseFormComponentType,
 > {
-  components: Partial<Record<T, Component>>;
   config?: {
     baseModelPropName?: string;
     disabledOnChangeListener?: boolean;
