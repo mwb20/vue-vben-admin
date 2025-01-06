@@ -60,6 +60,7 @@ Modal 内的内容一般业务中，会比较复杂，所以我们可以将 moda
 
 - `VbenModal` 组件对与参数的处理优先级是 `slot` > `props` > `state`(通过api更新的状态以及useVbenModal参数)。如果你已经传入了 `slot` 或者 `props`，那么 `setState` 将不会生效，这种情况下你可以通过 `slot` 或者 `props` 来更新状态。
 - 如果你使用到了 `connectedComponent` 参数，那么会存在 2 个`useVbenModal`, 此时，如果同时设置了相同的参数，那么以内部为准（也就是没有设置 connectedComponent 的代码）。比如 同时设置了 `onConfirm`，那么以内部的 `onConfirm` 为准。`onOpenChange`事件除外，内外都会触发。
+- 使用了`connectedComponent`参数时，可以配置`destroyOnClose`属性来决定当关闭弹窗时，是否要销毁`connectedComponent`组件（重新创建`connectedComponent`组件，这将会把其内部所有的变量、状态、数据等恢复到初始状态。）。
 
 :::
 
@@ -80,6 +81,9 @@ const [Modal, modalApi] = useVbenModal({
 
 | 属性名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
+| appendToMain | 是否挂载到内容区域（默认挂载到body） | `boolean` | `false` |
+| connectedComponent | 连接另一个Modal组件 | `Component` | - |
+| destroyOnClose | 关闭时销毁`connectedComponent` | `boolean` | `false` |
 | title | 标题 | `string\|slot` | - |
 | titleTooltip | 标题提示信息 | `string\|slot` | - |
 | description | 描述信息 | `string\|slot` | - |
@@ -93,18 +97,26 @@ const [Modal, modalApi] = useVbenModal({
 | modal | 显示遮罩 | `boolean` | `true` |
 | header | 显示header | `boolean` | `true` |
 | footer | 显示footer | `boolean\|slot` | `true` |
+| confirmDisabled | 禁用确认按钮 | `boolean` | `false` |
 | confirmLoading | 确认按钮loading状态 | `boolean` | `false` |
 | closeOnClickModal | 点击遮罩关闭弹窗 | `boolean` | `true` |
 | closeOnPressEscape | esc 关闭弹窗 | `boolean` | `true` |
 | confirmText | 确认按钮文本 | `string\|slot` | `确认` |
 | cancelText | 取消按钮文本 | `string\|slot` | `取消` |
 | showCancelButton | 显示取消按钮 | `boolean` | `true` |
-| showConfirmButton | 显示确认按钮文本 | `boolean` | `true` |
+| showConfirmButton | 显示确认按钮 | `boolean` | `true` |
 | class | modal的class，宽度通过这个配置 | `string` | - |
 | contentClass | modal内容区域的class | `string` | - |
 | footerClass | modal底部区域的class | `string` | - |
 | headerClass | modal顶部区域的class | `string` | - |
 | bordered | 是否显示border | `boolean` | `false` |
+| zIndex | 弹窗的ZIndex层级 | `number` | `1000` |
+
+::: info appendToMain
+
+`appendToMain`可以指定将弹窗挂载到内容区域，打开这种弹窗时，内容区域以外的部分（标签栏、导航菜单等等）不会被遮挡。默认情况下，弹窗会挂载到body上。但是：挂载到内容区域时，作为页面根容器的`Page`组件，需要设置`auto-content-height`属性，以便弹窗能够正确计算高度。
+
+:::
 
 ### Event
 

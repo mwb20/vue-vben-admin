@@ -16,12 +16,84 @@ outline: deep
 
 :::
 
-::: tip README
+## 适配器
 
-下方示例代码中, 出现的 `inject<UseVbenVxeGrid>` 是为了适配文档内的示例，实际使用时直接从 `'@vben/plugins/vxe-table'` 引入即可。
+表格底层使用 [vxe-table](https://vxetable.cn/#/start/install) 进行实现，所以你可以使用 `vxe-table` 的所有功能。对于不同的 UI 框架，我们提供了适配器，以便更好的适配不同的 UI 框架。
 
-```typescript
-import { useVbenVxeGrid } from '@vben/plugins/vxe-table';
+### 适配器说明
+
+每个应用都可以自己配置`vxe-table`的适配器，你可以根据自己的需求。下面是一个简单的配置示例：
+
+::: details vxe-table 表格适配器
+
+```ts
+import { h } from 'vue';
+
+import { setupVbenVxeTable, useVbenVxeGrid } from '@vben/plugins/vxe-table';
+
+import { Button, Image } from 'ant-design-vue';
+
+import { useVbenForm } from './form';
+
+setupVbenVxeTable({
+  configVxeTable: (vxeUI) => {
+    vxeUI.setConfig({
+      grid: {
+        align: 'center',
+        border: false,
+        columnConfig: {
+          resizable: true,
+        },
+        minHeight: 180,
+        formConfig: {
+          // 全局禁用vxe-table的表单配置，使用formOptions
+          enabled: false,
+        },
+        proxyConfig: {
+          autoLoad: true,
+          response: {
+            result: 'items',
+            total: 'total',
+            list: 'items',
+          },
+          showActiveMsg: true,
+          showResponseMsg: false,
+        },
+        round: true,
+        showOverflow: true,
+        size: 'small',
+      },
+    });
+
+    // 表格配置项可以用 cellRender: { name: 'CellImage' },
+    vxeUI.renderer.add('CellImage', {
+      renderTableDefault(_renderOpts, params) {
+        const { column, row } = params;
+        return h(Image, { src: row[column.field] });
+      },
+    });
+
+    // 表格配置项可以用 cellRender: { name: 'CellLink' },
+    vxeUI.renderer.add('CellLink', {
+      renderTableDefault(renderOpts) {
+        const { props } = renderOpts;
+        return h(
+          Button,
+          { size: 'small', type: 'link' },
+          { default: () => props?.text },
+        );
+      },
+    });
+
+    // 这里可以自行扩展 vxe-table 的全局配置，比如自定义格式化
+    // vxeUI.formats.add
+  },
+  useVbenForm,
+});
+
+export { useVbenVxeGrid };
+
+export type * from '@vben/plugins/vxe-table';
 ```
 
 :::
@@ -40,7 +112,7 @@ import { useVbenVxeGrid } from '@vben/plugins/vxe-table';
 
 ## 树形表格
 
-树形表格，的数据源为扁平结构，可以指定`treeConfig`配置项，实现树形表格。
+树形表格的数据源为扁平结构，可以指定`treeConfig`配置项，实现树形表格。
 
 ```typescript
 treeConfig: {
@@ -93,6 +165,8 @@ vxeUI.renderer.add('CellLink', {
 
 **表单搜索** 部分采用了`Vben Form 表单`，参考 [Vben Form 表单文档](/components/common-ui/vben-form)。
 
+当启用了表单搜索时，可以在toolbarConfig中配置`search`为`true`来让表格在工具栏区域显示一个搜索表单控制按钮。
+
 <DemoPreview dir="demos/vben-vxe-table/form" />
 
 ## 单元格编辑
@@ -114,3 +188,55 @@ vxeUI.renderer.add('CellLink', {
 > 参考 [vxe-table 官方文档 - 虚拟滚动](https://vxetable.cn/v4/#/component/grid/scroll/vertical)。
 
 <DemoPreview dir="demos/vben-vxe-table/virtual" />
+
+## API
+
+`useVbenVxeGrid` 返回一个数组，第一个元素是表格组件，第二个元素是表格的方法。
+
+```vue
+<script setup lang="ts">
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+
+// Grid 为表格组件
+// gridApi 为表格的方法
+const [Grid, gridApi] = useVbenVxeGrid({
+  gridOptions: {},
+  formOptions: {},
+  gridEvents: {},
+  // 属性
+  // 事件
+});
+</script>
+
+<template>
+  <Grid />
+</template>
+```
+
+### GridApi
+
+useVbenVxeGrid 返回的第二个参数，是一个对象，包含了一些表单的方法。
+
+| 方法名 | 描述 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| setLoading | 设置loading状态 | `(loading)=>void` | - |
+| setGridOptions | 设置vxe-table grid组件参数 | `(options: Partial<VxeGridProps['gridOptions'])=>void` | - |
+| reload | 重载表格，会进行初始化 | `(params:any)=>void` | - |
+| query | 重载表格，会保留当前分页 | `(params:any)=>void` | - |
+| grid | vxe-table grid实例 | `VxeGridInstance` | - |
+| formApi | vbenForm api实例 | `FormApi` | - |
+| toggleSearchForm | 设置搜索表单显示状态 | `(show?: boolean)=>boolean` | 当省略参数时，则将表单在显示和隐藏两种状态之间切换 |
+
+## Props
+
+所有属性都可以传入 `useVbenVxeGrid` 的第一个参数中。
+
+| 属性名         | 描述               | 类型                |
+| -------------- | ------------------ | ------------------- |
+| tableTitle     | 表格标题           | `string`            |
+| tableTitleHelp | 表格标题帮助信息   | `string`            |
+| gridClass      | grid组件的class    | `string`            |
+| gridOptions    | grid组件的参数     | `VxeTableGridProps` |
+| gridEvents     | grid组件的触发的⌚️ | `VxeGridListeners`  |
+| formOptions    | 表单参数           | `VbenFormProps`     |
+| showSearchForm | 是否显示搜索表单   | `boolean`           |

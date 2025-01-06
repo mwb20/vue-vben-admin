@@ -5,6 +5,8 @@ import type {
   ContextMenuRootProps,
 } from 'radix-vue';
 
+import type { ClassType } from '@vben-core/typings';
+
 import type { IContextMenuItem } from './interface';
 
 import { computed } from 'vue';
@@ -21,14 +23,14 @@ import {
 } from '../../ui/context-menu';
 
 const props = defineProps<
-  {
-    class?: any;
-    contentClass?: any;
+  ContextMenuRootProps & {
+    class?: ClassType;
+    contentClass?: ClassType;
     contentProps?: ContextMenuContentProps;
     handlerData?: Record<string, any>;
-    itemClass?: any;
+    itemClass?: ClassType;
     menus: (data: any) => IContextMenuItem[];
-  } & ContextMenuRootProps
+  }
 >();
 
 const emits = defineEmits<ContextMenuRootEmits>();

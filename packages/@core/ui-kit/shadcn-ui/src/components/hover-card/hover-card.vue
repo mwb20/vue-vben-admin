@@ -5,6 +5,8 @@ import type {
   HoverCardRootProps,
 } from 'radix-vue';
 
+import type { ClassType } from '@vben-core/typings';
+
 import { computed } from 'vue';
 
 import { useForwardPropsEmits } from 'radix-vue';
@@ -12,8 +14,8 @@ import { useForwardPropsEmits } from 'radix-vue';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../ui';
 
 interface Props extends HoverCardRootProps {
-  class?: any;
-  contentClass?: any;
+  class?: ClassType;
+  contentClass?: ClassType;
   contentProps?: HoverCardContentProps;
 }
 

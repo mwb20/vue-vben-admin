@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { VbenFormProps } from '#/adapter/form';
-import type { UseVbenVxeGrid, VxeGridProps } from '#/adapter/vxe-table';
-
-import { inject } from 'vue';
+import type { VxeGridProps } from '#/adapter/vxe-table';
 
 import { message } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 
 import { getExampleTableApi } from '../mock-api';
 
@@ -16,10 +16,6 @@ interface RowType {
   productName: string;
   releaseDate: string;
 }
-
-const useVbenVxeGrid = inject<UseVbenVxeGrid>(
-  'useVbenVxeGrid',
-) as UseVbenVxeGrid;
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -80,6 +76,8 @@ const formOptions: VbenFormProps = {
   submitButtonOptions: {
     content: '查询',
   },
+  // 是否在字段值改变时提交表单
+  submitOnChange: false,
   // 按下回车时是否提交表单
   submitOnEnter: false,
 };
@@ -111,6 +109,11 @@ const gridOptions: VxeGridProps<RowType> = {
         });
       },
     },
+  },
+  toolbarConfig: {
+    // 是否显示搜索表单控制按钮
+    // @ts-ignore 正式环境时有完整的类型声明
+    search: true,
   },
 };
 

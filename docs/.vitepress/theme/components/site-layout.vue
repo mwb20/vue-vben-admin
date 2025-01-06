@@ -10,7 +10,6 @@ import {
 
 // import { useAntdDesignTokens } from '@vben/hooks';
 // import { initPreferences } from '@vben/preferences';
-
 import { ConfigProvider, theme } from 'ant-design-vue';
 import mediumZoom from 'medium-zoom';
 import { useRoute } from 'vitepress';
@@ -31,21 +30,6 @@ watch(
   () => route.path,
   () => nextTick(() => initZoom()),
 );
-
-function setVxeTheme(name?: string) {
-  const theme = !name || name === 'default' ? 'light' : name;
-
-  if (typeof document !== 'undefined') {
-    const documentElement = document.documentElement;
-    if (documentElement) {
-      documentElement.dataset.vxeUiTheme = theme;
-    }
-  }
-}
-
-watch(isDark, (dark) => {
-  setVxeTheme(dark ? 'dark' : 'light');
-});
 
 // initPreferences({
 //   namespace: 'docs',

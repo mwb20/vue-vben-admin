@@ -1,8 +1,13 @@
-import type { ModalApi } from './modal-api';
-
 import type { Component, Ref } from 'vue';
 
+import type { ModalApi } from './modal-api';
+
 export interface ModalProps {
+  /**
+   * 是否要挂载到内容区域
+   * @default false
+   */
+  appendToMain?: boolean;
   /**
    * 是否显示边框
    * @default false
@@ -12,7 +17,6 @@ export interface ModalProps {
    * 取消按钮文字
    */
   cancelText?: string;
-
   /**
    * 是否居中
    * @default false
@@ -20,6 +24,7 @@ export interface ModalProps {
   centered?: boolean;
 
   class?: string;
+
   /**
    * 是否显示右上角的关闭按钮
    * @default true
@@ -35,6 +40,10 @@ export interface ModalProps {
    * @default true
    */
   closeOnPressEscape?: boolean;
+  /**
+   * 禁用确认按钮
+   */
+  confirmDisabled?: boolean;
   /**
    * 确定按钮 loading
    * @default false
@@ -108,6 +117,10 @@ export interface ModalProps {
    * 弹窗标题提示
    */
   titleTooltip?: string;
+  /**
+   * 弹窗层级
+   */
+  zIndex?: number;
 }
 
 export interface ModalState extends ModalProps {
@@ -119,17 +132,21 @@ export interface ModalState extends ModalProps {
   sharedData?: Record<string, any>;
 }
 
-export type ExtendedModalApi = {
+export type ExtendedModalApi = ModalApi & {
   useStore: <T = NoInfer<ModalState>>(
     selector?: (state: NoInfer<ModalState>) => T,
   ) => Readonly<Ref<T>>;
-} & ModalApi;
+};
 
 export interface ModalApiOptions extends ModalState {
   /**
    * 独立的弹窗组件
    */
   connectedComponent?: Component;
+  /**
+   * 在关闭时销毁弹窗。仅在使用 connectedComponent 时有效
+   */
+  destroyOnClose?: boolean;
   /**
    * 关闭前的回调，返回 false 可以阻止关闭
    * @returns

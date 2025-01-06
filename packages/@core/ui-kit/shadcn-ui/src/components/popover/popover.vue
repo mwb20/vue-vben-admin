@@ -5,6 +5,8 @@ import type {
   PopoverRootProps,
 } from 'radix-vue';
 
+import type { ClassType } from '@vben-core/typings';
+
 import { computed } from 'vue';
 
 import { useForwardPropsEmits } from 'radix-vue';
@@ -16,8 +18,8 @@ import {
 } from '../../ui';
 
 interface Props extends PopoverRootProps {
-  class?: any;
-  contentClass?: any;
+  class?: ClassType;
+  contentClass?: ClassType;
   contentProps?: PopoverContentProps;
 }
 
