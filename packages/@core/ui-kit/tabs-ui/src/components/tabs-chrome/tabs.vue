@@ -12,7 +12,6 @@ interface Props extends TabsProps {}
 
 defineOptions({
   name: 'VbenTabsChrome',
-  // eslint-disable-next-line perfectionist/sort-objects
   inheritAttrs: false,
 });
 
@@ -41,14 +40,14 @@ const style = computed(() => {
 
 const tabsView = computed(() => {
   return props.tabs.map((tab) => {
-    const { fullPath, meta, name, path } = tab || {};
+    const { fullPath, meta, name, path, key } = tab || {};
     const { affixTab, icon, newTabTitle, tabClosable, title } = meta || {};
     return {
       affixTab: !!affixTab,
       closable: Reflect.has(meta, 'tabClosable') ? !!tabClosable : true,
       fullPath,
       icon: icon as string,
-      key: fullPath || path,
+      key,
       meta,
       name,
       path,
@@ -56,6 +55,20 @@ const tabsView = computed(() => {
     } as TabConfig;
   });
 });
+
+function onMouseDown(e: MouseEvent, tab: TabConfig) {
+  if (
+    e.button === 1 &&
+    tab.closable &&
+    !tab.affixTab &&
+    tabsView.value.length > 1 &&
+    props.middleClickToClose
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+    emit('close', tab.key);
+  }
+}
 </script>
 
 <template>
@@ -82,6 +95,7 @@ const tabsView = computed(() => {
         class="tabs-chrome__item draggable translate-all group relative -mr-3 flex h-full select-none items-center"
         data-tab-item="true"
         @click="active = tab.key"
+        @mousedown="onMouseDown($event, tab)"
       >
         <VbenContextMenu
           :handler-data="tab"

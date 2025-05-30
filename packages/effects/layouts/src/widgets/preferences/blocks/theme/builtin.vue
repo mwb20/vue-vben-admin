@@ -2,12 +2,14 @@
 import type { BuiltinThemePreset } from '@vben/preferences';
 import type { BuiltinThemeType } from '@vben/types';
 
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { UserRoundPen } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { BUILT_IN_THEME_PRESETS } from '@vben/preferences';
 import { convertToHsl, TinyColor } from '@vben/utils';
+
+import { useThrottleFn } from '@vueuse/core';
 
 defineOptions({
   name: 'PreferenceBuiltinTheme',
@@ -18,6 +20,15 @@ const props = defineProps<{ isDark: boolean }>();
 const colorInput = ref();
 const modelValue = defineModel<BuiltinThemeType>({ default: 'default' });
 const themeColorPrimary = defineModel<string>('themeColorPrimary');
+
+const updateThemeColorPrimary = useThrottleFn(
+  (value: string) => {
+    themeColorPrimary.value = value;
+  },
+  300,
+  true,
+  true,
+);
 
 const inputValue = computed(() => {
   return new TinyColor(themeColorPrimary.value || '').toHexString();
@@ -80,21 +91,32 @@ function typeView(name: BuiltinThemeType) {
 
 function handleSelect(theme: BuiltinThemePreset) {
   modelValue.value = theme.type;
-  const primaryColor = props.isDark
-    ? theme.darkPrimaryColor || theme.primaryColor
-    : theme.primaryColor;
-
-  themeColorPrimary.value = primaryColor || theme.color;
 }
 
 function handleInputChange(e: Event) {
   const target = e.target as HTMLInputElement;
-  themeColorPrimary.value = convertToHsl(target.value);
+  updateThemeColorPrimary(convertToHsl(target.value));
 }
 
 function selectColor() {
   colorInput.value?.[0]?.click?.();
 }
+
+watch(
+  () => [modelValue.value, props.isDark] as [BuiltinThemeType, boolean],
+  ([themeType, isDark]) => {
+    const theme = builtinThemePresets.value.find(
+      (item) => item.type === themeType,
+    );
+    if (theme) {
+      const primaryColor = isDark
+        ? theme.darkPrimaryColor || theme.primaryColor
+        : theme.primaryColor;
+
+      themeColorPrimary.value = primaryColor || theme.color;
+    }
+  },
+);
 </script>
 
 <template>

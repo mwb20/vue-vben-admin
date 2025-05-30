@@ -30,7 +30,7 @@ const {
 } = useTabbar();
 
 const menus = computed(() => {
-  const tab = tabbarStore.getTabByPath(currentActive.value);
+  const tab = tabbarStore.getTabByKey(currentActive.value);
   const menus = createContextMenus(tab);
   return menus.map((item) => {
     return {
@@ -57,6 +57,7 @@ if (!preferences.tabbar.persist) {
     :style-type="preferences.tabbar.styleType"
     :tabs="currentTabs"
     :wheelable="preferences.tabbar.wheelable"
+    :middle-click-to-close="preferences.tabbar.middleClickToClose"
     @close="handleClose"
     @sort-tabs="tabbarStore.sortTabs"
     @unpin="unpinTab"

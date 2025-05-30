@@ -19,6 +19,8 @@
   "twoColumnTip": "Vertical Two Column Menu Mode",
   "headerSidebarNav": "Header Vertical",
   "headerSidebarNavTip": "Header Full Width, Sidebar Navigation Mode",
+  "headerTwoColumn": "Header Two Column",
+  "headerTwoColumnTip": "Header Navigation & Sidebar Two Column co-exists",
   "mixedMenu": "Mixed Menu",
   "mixedMenuTip": "Vertical & Horizontal Menu Co-exists",
   "fullContent": "Full Content",
@@ -43,6 +45,9 @@
     "fixed": "Fixed"
   },
   "sidebar": {
+    "buttons": "Show Buttons",
+    "buttonFixed": "Fixed",
+    "buttonCollapsed": "Collapsed",
     "title": "Sidebar",
     "width": "Width",
     "visible": "Show Sidebar",
@@ -60,8 +65,11 @@
     "showMore": "Show More Button",
     "showMaximize": "Show Maximize Button",
     "persist": "Persist Tabs",
+    "maxCount": "Max Count of Tabs",
+    "maxCountTip": "When the number of tabs exceeds the maximum,\nthe oldest tab will be closed.\n Set to 0 to disable count checking.",
     "draggable": "Enable Draggable Sort",
     "wheelable": "Support Mouse Wheel",
+    "middleClickClose": "Close Tab when Mouse Middle Button Click",
     "wheelableTip": "When enabled, the Tabbar area responds to vertical scrolling events of the scroll wheel.",
     "styleType": {
       "title": "Tabs Style",
