@@ -7,7 +7,6 @@ import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
-  defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
@@ -50,9 +49,15 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    */
   async function doRefreshToken() {
     const accessStore = useAccessStore();
-    const resp = await refreshTokenApi();
-    const newToken = resp.data;
+    // by mwb 2024年10月27日 刷新token时传入刷新token，减少在api方法中引入store获取token
+    const resp = await refreshTokenApi(accessStore.refreshToken);
+    const newToken = resp.access_token;
     accessStore.setAccessToken(newToken);
+    // by mwb 2024年10月27日 如果存在刷新token时保存刷新token
+    const refreshToken = resp.refresh_token;
+    if (refreshToken) {
+      accessStore.setRefreshToken(resp.refresh_token);
+    }
     return newToken;
   }
 
@@ -72,13 +77,33 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   });
 
   // 处理返回的响应数据格式
-  client.addResponseInterceptor(
-    defaultResponseInterceptor({
-      codeField: 'code',
-      dataField: 'data',
-      successCode: 0,
-    }),
-  );
+  // client.addResponseInterceptor(
+  //   defaultResponseInterceptor({
+  //     codeField: 'currentTenant',
+  //     dataField: (data: any) => {
+  //       console.log(data);
+  //       return false;
+  //     },
+  //     successCode: 0,
+  //   }),
+  // );
+
+  // 对abp返回的响应数据进行处理
+  client.addResponseInterceptor({
+    fulfilled: (response) => {
+      const { data: responseData, status } = response;
+
+      const { code, data } = responseData;
+      // abp的application-configuration接口返回数据不包含code，所以code不存在时也视为成功
+      if (status >= 200 && status < 400 && (!code || code === 0)) {
+        if (data) {
+          return data;
+        }
+        return responseData;
+      }
+      throw Object.assign({}, response, { response });
+    },
+  });
 
   // token过期的处理
   client.addResponseInterceptor(
@@ -98,8 +123,13 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
       const errorMessage = responseData?.error ?? responseData?.message ?? '';
-      // 如果没有错误信息，则会根据状态码进行提示
-      message.error(errorMessage || msg);
+      // abp返回的错误信息是一个对象，包含message和details字段
+      if (errorMessage && errorMessage.message) {
+        message.error(errorMessage.message + (errorMessage.details || ''), 6);
+      } else {
+        // 如果没有错误信息，则会根据状态码进行提示
+        message.error(errorMessage || msg);
+      }
     }),
   );
 
