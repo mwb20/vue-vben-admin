@@ -10,13 +10,8 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import {
-  getAccessCodesApi,
-  getUserInfoApi,
-  loginApi,
-  logoutApi,
-  refreshTokenApi,
-} from '#/api';
+import { loginApi, logoutApi, refreshTokenApi } from '#/api';
+import { applicationConfiguration } from '#/api/abp/index';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -49,16 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessStore.setRefreshToken(refresh_token);
         }
 
-        // 获取用户信息并存储到 accessStore 中
-        const [fetchUserInfoResult, accessCodes] = await Promise.all([
-          fetchUserInfo(),
-          getAccessCodesApi(),
-        ]);
-
-        userInfo = fetchUserInfoResult;
-
-        userStore.setUserInfo(userInfo);
-        accessStore.setAccessCodes(accessCodes);
+        userInfo = await fetchUserInfo();
 
         if (accessStore.loginExpired) {
           accessStore.setLoginExpired(false);
@@ -109,7 +95,13 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUserInfo() {
     let userInfo: null | UserInfo = null;
-    userInfo = await getUserInfoApi();
+
+    let config = await applicationConfiguration();
+
+    userInfo = {
+      realName: config.currentUser.name,
+    } as UserInfo;
+
     /* 获取到的用户昵称为空时刷新token，如果刷新失败跳转到登录页面 by mwb 2024年10月27日 */
     if (!userInfo.realName) {
       try {
@@ -122,7 +114,10 @@ export const useAuthStore = defineStore('auth', () => {
             accessStore.setRefreshToken(refresh_token);
           }
           // 刷新token后重新获取用户信息
-          userInfo = await getUserInfoApi();
+          config = await applicationConfiguration();
+          userInfo = {
+            realName: config.currentUser.name,
+          } as UserInfo;
         }
       } catch {}
 
@@ -137,6 +132,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
     /* 获取到的用户昵称为空时刷新token，如果刷新失败跳转到登录页面 by mwb 2024年10月27日 */
     userStore.setUserInfo(userInfo);
+    // 存储用户权限码 by mwb 2025年6月2日
+    if (config && config.auth && config.auth.grantedPolicies) {
+      const accessCodes = Object.entries(config.auth.grantedPolicies)
+        .filter(([, value]) => value === true) // 过滤出值为 true 的属性
+        .map(([key]) => key);
+      // 存储用户权限码 by mwb 2025年6月2日
+      accessStore.setAccessCodes(accessCodes);
+    } else {
+      // 如果用户没有权限码，则清空权限码 by mwb 2025年6月2日
+      accessStore.setAccessCodes([]);
+    }
     return userInfo;
   }
 
