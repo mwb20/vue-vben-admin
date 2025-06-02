@@ -9,5 +9,6 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     name: import.meta.env.VITE_APP_TITLE,
+    enableRefreshToken: true, // 是否开启刷新token by mwb 2025年6月2日
   },
 });
