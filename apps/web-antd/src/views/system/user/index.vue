@@ -1,108 +1,135 @@
 <script lang="ts" setup>
-import type { VxeGridProps } from '#/adapter/vxe-table';
+import { Page, useVbenModal } from '@vben/common-ui';
+import { LockKeyhole } from '@vben/icons';
 
-import { Page } from '@vben/common-ui';
-
-import { Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, MenuItem, Space, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getUsers } from '#/api/abp/index';
 
-interface RowType {
-  id: string;
-  userName: string;
-  name: string;
-  phoneNumber: string;
-  email: string;
-  emailConfirmed: boolean;
+import EditFormModal from './edit.vue';
+import { MainGridOptions, SearchFormOptions } from './schema';
+
+/**
+ * @description: 配置表格组件
+ */
+const [Grid] = useVbenVxeGrid({
+  formOptions: SearchFormOptions,
+  gridOptions: MainGridOptions,
+  separator: false,
+});
+
+/**
+ * @description: 配置编辑组件
+ */
+const [EditModal, EditModalApi] = useVbenModal({
+  connectedComponent: EditFormModal,
+});
+
+/**
+ * @description: 编辑
+ */
+function onEdit(row: any) {
+  EditModalApi.setState({ title: '编辑' })
+    .setData({
+      id: row.id,
+    })
+    .open();
 }
-
-const gridOptions: VxeGridProps<RowType> = {
-  checkboxConfig: {
-    highlight: true,
-  },
-  border: true,
-  columns: [
-    { field: 'id', type: 'checkbox', width: 50 },
-    { field: 'userName', title: '用户名', minWidth: 80, sortable: true },
-    { field: 'name', title: '姓名', sortable: true, minWidth: 80 },
-    { field: 'phoneNumber', title: '手机号', minWidth: 150 },
-    { field: 'email', title: '邮箱', minWidth: 150 },
-    {
-      field: 'emailConfirmed',
-      slots: { default: 'email-confirmed' },
-      title: '验证邮箱',
-      minWidth: 75,
-    },
-    {
-      field: 'creationTime',
-      title: '创建时间',
-      formatter: 'formatDateTime',
-      minWidth: 150,
-    },
-  ],
-  printConfig: {
-    columns: [
-      { field: 'userName' },
-      { field: 'name' },
-      { field: 'phoneNumber' },
-      { field: 'email' },
-      { field: 'emailConfirmed' },
-      { field: 'creationTime' },
-    ],
-  },
-  height: 'auto',
-  keepSource: true,
-  sortConfig: {
-    trigger: 'cell',
-    remote: true,
-  },
-  toolbarConfig: {
-    buttons: [
-      {
-        code: 'insert_actived',
-        name: '新增',
-      },
-      { code: 'delete', name: '直接删除' },
-      { code: 'mark_cancel', name: '删除/取消' },
-    ],
-    refresh: true, // 显示刷新按钮
-    print: true, // 显示打印按钮
-    zoom: true, // 显示全屏按钮
-    custom: true, // 显示自定义列按钮
-  },
-  pagerConfig: {},
-  proxyConfig: {
-    sort: true,
-    ajax: {
-      query: async ({ page, sort }) => {
-        return getUsers({
-          filter: null,
-          sorting: sort.order ? `${sort.field} ${sort.order}` : null,
-          skipCount: (page.currentPage - 1) * page.pageSize,
-          maxResultCount: page.pageSize,
-        });
-      },
-      delete: async () => {
-        return new Promise((resolve) => {
-          resolve([]);
-        });
-      },
-    },
-  },
-};
-
-const [Grid] = useVbenVxeGrid({ gridOptions });
+/**
+ * @description: 启用/禁用
+ */
+function onEnabled(row: any) {
+  // eslint-disable-next-line no-console
+  console.log(row);
+}
+/**
+ * @description: 删除
+ */
+function onDel(row: any) {
+  // eslint-disable-next-line no-console
+  console.log(row);
+}
+/**
+ * @description: 打开新增窗口
+ */
+function onAdd() {
+  EditModalApi.setState({ title: '新增' }).open();
+}
 </script>
 
 <template>
   <Page auto-content-height>
     <Grid>
-      <template #toolbar-tools></template>
+      <template #toolbar-actions>
+        <Space align="center">
+          <Button
+            type="primary"
+            v-access:code="'AbpIdentity.Users.Create'"
+            @click="onAdd"
+          >
+            新增
+          </Button>
+        </Space>
+      </template>
       <template #email-confirmed="{ row }">
         <Tag v-if="row.emailConfirmed" color="green">是</Tag>
         <Tag v-if="!row.emailConfirmed" color="orange">否</Tag>
       </template>
+      <template #action="{ row }">
+        <Space>
+          <Button
+            size="small"
+            type="primary"
+            v-access:code="'AbpIdentity.Users.Update'"
+            @click="onEdit(row)"
+          >
+            {{ $t('abp.edit') }}
+          </Button>
+          <Dropdown>
+            <a
+              href="javascript:;"
+              class="icon-[material-symbols--more-vert] flex size-4"
+            ></a>
+            <template #overlay>
+              <Menu>
+                <MenuItem
+                  key="0"
+                  v-access:code="'AbpIdentity.Users.Enable'"
+                  @click="onEnabled(row)"
+                >
+                  <span class="flex items-center">
+                    <LockKeyhole class="mr-2 size-4" />
+                    {{ row.isActive ? $t('abp.disabled') : $t('abp.enabled') }}
+                  </span>
+                </MenuItem>
+                <MenuItem
+                  key="1"
+                  v-access:code="'AbpIdentity.Users.Delete'"
+                  @click="onDel(row)"
+                >
+                  <span class="flex items-center">
+                    <i
+                      class="icon-[material-symbols--delete-outline] mr-2 size-4"
+                    ></i>
+                    {{ $t('abp.delete') }}
+                  </span>
+                </MenuItem>
+                <MenuItem
+                  key="2"
+                  v-access:code="'AbpIdentity.Users.Delete'"
+                  @click="onDel(row)"
+                >
+                  <span class="flex items-center">
+                    <i class="icon-[ic--baseline-lock-reset] mr-2 size-4"></i>
+                    {{ $t('abp.resetPassword') }}
+                  </span>
+                </MenuItem>
+              </Menu>
+            </template>
+          </Dropdown>
+        </Space>
+      </template>
     </Grid>
+    <EditModal />
   </Page>
 </template>
