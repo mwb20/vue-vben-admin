@@ -1,31 +1,32 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-
 import { useVbenModal } from '@vben/common-ui';
 
-import { message } from 'ant-design-vue';
+import { TabPane, Tabs } from 'ant-design-vue';
 
-import { useVbenForm } from '#/adapter/form';
+import { useVbenForm, z } from '#/adapter/form';
+import { onConfirm } from '#/components/common/methods';
 
-const data = ref();
+const emit = defineEmits(['reload']);
 const [EditModal, modalApi] = useVbenModal({
   onOpenChange(isOpen: boolean) {
     if (isOpen) {
-      data.value = modalApi.getData<Record<string, any>>();
+      const value = modalApi.getData<Record<string, any>>();
+      editFormApi.setValues(value);
     }
   },
+  onConfirm: onFormConfirm,
+  destroyOnClose: true,
 });
 
-const [EditForm] = useVbenForm({
+const [EditForm, editFormApi] = useVbenForm({
   // 所有表单项共用，可单独在表单内覆盖
   commonConfig: {
     // 所有表单项
-    componentProps: {
-      class: 'w-full',
-    },
+    labelWidth: 80,
   },
+  showDefaultActions: false,
   // 提交函数
-  handleSubmit: onSubmit,
+  // handleSubmit: onSubmit,
   // 垂直布局，label和input在不同行，值为vertical
   // 水平布局，label和input在同一行
   layout: 'horizontal',
@@ -35,12 +36,46 @@ const [EditForm] = useVbenForm({
       component: 'Input',
       // 对应组件的参数
       componentProps: {
-        placeholder: '请输入用户名',
+        placeholder: '请输入用户名称',
       },
       // 字段名
-      fieldName: 'username',
+      fieldName: 'userName',
       // 界面显示的label
-      label: '字符串',
+      label: '用户名',
+      rules: 'required',
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入姓氏',
+      },
+      fieldName: 'surname',
+      label: '姓',
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入名',
+      },
+      fieldName: 'name',
+      label: '名',
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入邮箱',
+      },
+      fieldName: 'email',
+      label: '邮箱',
+      rules: z.string().email('请输入正确的邮箱'),
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入手机号',
+      },
+      fieldName: 'phoneNumber',
+      label: '手机号',
     },
     {
       component: 'InputPassword',
@@ -51,196 +86,90 @@ const [EditForm] = useVbenForm({
       label: '密码',
     },
     {
-      component: 'InputNumber',
+      component: 'InputPassword',
       componentProps: {
-        placeholder: '请输入',
+        placeholder: '请输入确认密码',
       },
-      fieldName: 'number',
-      label: '数字(带后缀)',
-      suffix: () => '¥',
-    },
-    {
-      component: 'Select',
-      componentProps: {
-        allowClear: true,
-        filterOption: true,
-        options: [
-          {
-            label: '选项1',
-            value: '1',
-          },
-          {
-            label: '选项2',
-            value: '2',
-          },
-        ],
-        placeholder: '请选择',
-        showSearch: true,
+      fieldName: 'confirmPassword',
+      label: '确认密码',
+      dependencies: {
+        triggerFields: ['password'],
+        if(values) {
+          const noPassword = !values.password;
+          if (noPassword) {
+            // 没有密码时清空确认密码
+            values.confirmPassword = null;
+          }
+          return !noPassword;
+        },
+        rules(value) {
+          return z
+            .string(value)
+            .min(1, { message: '请输入确认密码' })
+            .refine(
+              (zvalue) => {
+                return zvalue === value.password;
+              },
+              {
+                message: '两次输入密码不一致',
+              },
+            );
+        },
       },
-      fieldName: 'options',
-      label: '下拉选',
-    },
-    {
-      component: 'RadioGroup',
-      componentProps: {
-        options: [
-          {
-            label: '选项1',
-            value: '1',
-          },
-          {
-            label: '选项2',
-            value: '2',
-          },
-        ],
-      },
-      fieldName: 'radioGroup',
-      label: '单选组',
-    },
-    {
-      component: 'Radio',
-      fieldName: 'radio',
-      label: '',
-      renderComponentContent: () => {
-        return {
-          default: () => ['Radio'],
-        };
-      },
-    },
-    {
-      component: 'CheckboxGroup',
-      componentProps: {
-        name: 'cname',
-        options: [
-          {
-            label: '选项1',
-            value: '1',
-          },
-          {
-            label: '选项2',
-            value: '2',
-          },
-        ],
-      },
-      fieldName: 'checkboxGroup',
-      label: '多选组',
-    },
-    {
-      component: 'Checkbox',
-      fieldName: 'checkbox',
-      label: '',
-      renderComponentContent: () => {
-        return {
-          default: () => ['我已阅读并同意'],
-        };
-      },
-    },
-    {
-      component: 'Mentions',
-      componentProps: {
-        options: [
-          {
-            label: 'afc163',
-            value: 'afc163',
-          },
-          {
-            label: 'zombieJ',
-            value: 'zombieJ',
-          },
-        ],
-        placeholder: '请输入',
-      },
-      fieldName: 'mentions',
-      label: '提及',
-    },
-    {
-      component: 'Rate',
-      fieldName: 'rate',
-      label: '评分',
     },
     {
       component: 'Switch',
-      componentProps: {
-        class: 'w-auto',
+      defaultValue: true,
+      fieldName: 'isActive',
+      label: '启用',
+    },
+    {
+      component: 'Switch',
+      defaultValue: false,
+      fieldName: 'lockoutEnabled',
+      label: '账户锁定',
+    },
+    {
+      component: 'Input',
+      fieldName: 'id',
+      dependencies: {
+        triggerFields: ['id'],
+        if() {
+          return false;
+        },
       },
-      fieldName: 'switch',
-      label: '开关',
     },
     {
-      component: 'DatePicker',
-      fieldName: 'datePicker',
-      label: '日期选择框',
-    },
-    {
-      component: 'RangePicker',
-      fieldName: 'rangePicker',
-      label: '范围选择器',
-    },
-    {
-      component: 'TimePicker',
-      fieldName: 'timePicker',
-      label: '时间选择框',
-    },
-    {
-      component: 'TreeSelect',
-      componentProps: {
-        allowClear: true,
-        placeholder: '请选择',
-        showSearch: true,
-        treeData: [
-          {
-            label: 'root 1',
-            value: 'root 1',
-            children: [
-              {
-                label: 'parent 1',
-                value: 'parent 1',
-                children: [
-                  {
-                    label: 'parent 1-0',
-                    value: 'parent 1-0',
-                    children: [
-                      {
-                        label: 'my leaf',
-                        value: 'leaf1',
-                      },
-                      {
-                        label: 'your leaf',
-                        value: 'leaf2',
-                      },
-                    ],
-                  },
-                  {
-                    label: 'parent 1-1',
-                    value: 'parent 1-1',
-                  },
-                ],
-              },
-              {
-                label: 'parent 2',
-                value: 'parent 2',
-              },
-            ],
-          },
-        ],
-        treeNodeFilterProp: 'label',
+      component: 'Input',
+      fieldName: 'concurrencyStamp',
+      dependencies: {
+        triggerFields: ['concurrencyStamp'],
+        if() {
+          return false;
+        },
       },
-      fieldName: 'treeSelect',
-      label: '树选择',
     },
   ],
-  wrapperClass: 'grid-cols-1',
+  wrapperClass: 'grid-cols-2',
 });
 
-function onSubmit(values: Record<string, any>) {
-  message.success({
-    content: `form values: ${JSON.stringify(values)}`,
-  });
+async function onFormConfirm() {
+  await onConfirm(editFormApi, modalApi, emit, '/api/identity/users/');
 }
 </script>
-
 <template>
-  <EditModal>
-    <EditForm />
+  <EditModal class="w-[60%]">
+    <Tabs>
+      <TabPane key="1" tab="用户信息">
+        <EditForm />
+      </TabPane>
+      <TabPane key="2" tab="角色">
+        <CheckboxGroup
+          v-model:value="checkedRoles"
+          :options="rolesList"
+          name="checkboxgroup"
+        />
+      </TabPane>
+    </Tabs>
   </EditModal>
 </template>

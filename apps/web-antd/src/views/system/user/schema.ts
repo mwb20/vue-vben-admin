@@ -1,19 +1,7 @@
 import type { VbenFormProps } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { getUsers } from '#/api/abp/index';
-
-/**
- * 类型定义
- */
-interface RowType {
-  id: string;
-  userName: string;
-  name: string;
-  phoneNumber: string;
-  email: string;
-  emailConfirmed: boolean;
-}
+import { requestClient } from '#/api/request';
 
 /**
  * 搜索表单配置
@@ -48,7 +36,7 @@ export const SearchFormOptions: VbenFormProps = {
 /**
  * 主表格配置
  */
-export const MainGridOptions: VxeGridProps<RowType> = {
+export const MainGridOptions: VxeGridProps<any> = {
   checkboxConfig: {
     highlight: true,
   },
@@ -77,9 +65,7 @@ export const MainGridOptions: VxeGridProps<RowType> = {
       fixed: 'right',
       title: '操作',
       width: 150,
-      slots: {
-        default: 'action',
-      },
+      slots: { default: 'action' },
     },
   ],
   printConfig: {
@@ -107,13 +93,19 @@ export const MainGridOptions: VxeGridProps<RowType> = {
   pagerConfig: {},
   proxyConfig: {
     sort: true,
+    response: {
+      result: 'items',
+      total: 'totalCount',
+    },
     ajax: {
       query: async ({ page, sort }, formValues) => {
-        return getUsers({
-          filter: formValues.filter,
-          sorting: sort.order ? `${sort.field} ${sort.order}` : null,
-          skipCount: (page.currentPage - 1) * page.pageSize,
-          maxResultCount: page.pageSize,
+        return requestClient.get('/api/identity/users', {
+          params: {
+            filter: formValues.filter,
+            sorting: sort.order ? `${sort.field} ${sort.order}` : undefined,
+            skipCount: (page.currentPage - 1) * page.pageSize,
+            maxResultCount: page.pageSize,
+          },
         });
       },
       delete: async () => {
