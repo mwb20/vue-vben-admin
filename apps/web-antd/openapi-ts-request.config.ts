@@ -165,7 +165,7 @@ function getParams(api: any, ctx: any): null | string {
   // 获取参数长度
   let params: string = '';
   if (api.parameters && api.parameters.length > 0) {
-    params = `params: ${ctx.namespace}.${api.typeName}`;
+    params = `params: ${ctx.namespace}.${api.typeName},`;
   }
   return params;
 }
@@ -178,7 +178,7 @@ function getParams(api: any, ctx: any): null | string {
 function getBodyParams(api: any) {
   let bodyParams: string = '';
   if (api.body && api.body.type) {
-    bodyParams = `body: ${api.body.type}`;
+    bodyParams = `body: ${api.body.type},`;
   }
   return bodyParams;
 }
@@ -221,19 +221,19 @@ export async function ${functionName}(${params})${responseType} {
         }
         if (api.method.toUpperCase() === 'POST') {
           return `
-export async function ${functionName}(${params}${bodyParams ? `${params ? ',' : ''}${bodyParams}` : ''})${responseType} {
+export async function ${functionName}(${params}${bodyParams})${responseType} {
   return requestClient.post(\`${path}\`${bodyParams ? `, body` : `${params ? ', null' : ''}`}${params ? ', { params, }' : ''})
 }`;
         }
         if (api.method.toUpperCase() === 'PUT') {
           return `
-export async function ${functionName}(${params}${bodyParams ? `${params ? ',' : ''}${bodyParams}` : ''})${responseType} {
+export async function ${functionName}(${params}${bodyParams})${responseType} {
   return requestClient.put(\`${path}\`${bodyParams ? `, body` : `${params ? ', null' : ''}`}${params ? ', { params, }' : ''})
 }`; // 有get参数时要添加到params
         }
         if (api.method.toUpperCase() === 'DELETE') {
           return `
-export async function ${functionName}(${params}${bodyParams ? `${params ? ',' : ''}${bodyParams}` : ''})${responseType} {
+export async function ${functionName}(${params}${bodyParams})${responseType} {
   return requestClient.delete(\`${path}\`${bodyParams ? `, body` : ''}${params ? ', { params, }' : ''})
 }`;
         }

@@ -21,7 +21,8 @@
     "dev": "pnpm vite --mode development",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
-    "openapi": "openapi-ts"
+    "openapi": "openapi-ts",
+    "format-api": "prettier --write src/api/abp-client/*.ts"
   },
   "imports": {
     "#/*": "./src/*"
@@ -49,6 +50,6 @@
     "vue-router": "catalog:"
   },
   "devDependencies": {
-    "openapi-ts-request": "^1.7.1"
+    "openapi-ts-request": "^1.12.4"
   }
 }
