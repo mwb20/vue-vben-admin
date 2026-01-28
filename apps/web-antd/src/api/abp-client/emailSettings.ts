@@ -13,6 +13,6 @@ export async function createEmailing(body: API.UpdateEmailSettingsDto) {
 export async function sendTestEmail(body: API.SendTestEmailInput) {
   return requestClient.post(
     `/api/setting-management/emailing/send-test-email`,
-    body
+    body,
   );
 }

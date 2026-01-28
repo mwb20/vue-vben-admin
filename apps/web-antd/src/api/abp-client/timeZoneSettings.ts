@@ -7,7 +7,7 @@ export async function getTimezone(): Promise<string> {
 }
 
 export async function createTimezone(
-  params: API.SettingManagementTimezoneUsingPostParams
+  params: API.SettingManagementTimezoneUsingPostParams,
 ) {
   return requestClient.post(`/api/setting-management/timezone`, null, {
     params,

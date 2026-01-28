@@ -7,7 +7,7 @@ export async function getMyProfile(): Promise<API.ProfileDto> {
 }
 
 export async function updateMyProfile(
-  body: API.UpdateProfileDto
+  body: API.UpdateProfileDto,
 ): Promise<API.ProfileDto> {
   return requestClient.put(`/api/account/my-profile`, body);
 }

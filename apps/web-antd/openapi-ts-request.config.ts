@@ -216,25 +216,25 @@ export default {
         if (api.method.toUpperCase() === 'GET') {
           return `
 export async function ${functionName}(${params})${responseType} {
-  return requestClient.get(\`${path}\`${parametersLen > 1 || (parametersLen === 1 && !path.includes('$')) ? `, { params }` : ''})
+  return requestClient.get(\`${path}\`${parametersLen > 1 || (parametersLen === 1 && !path.includes('$')) ? `, { params, }` : ''})
 }`;
         }
         if (api.method.toUpperCase() === 'POST') {
           return `
 export async function ${functionName}(${params}${bodyParams ? `${params ? ',' : ''}${bodyParams}` : ''})${responseType} {
-  return requestClient.post(\`${path}\`${bodyParams ? `, body` : ''})
+  return requestClient.post(\`${path}\`${bodyParams ? `, body` : `${params ? ', null' : ''}`}${params ? ', { params, }' : ''})
 }`;
         }
         if (api.method.toUpperCase() === 'PUT') {
           return `
 export async function ${functionName}(${params}${bodyParams ? `${params ? ',' : ''}${bodyParams}` : ''})${responseType} {
-  return requestClient.put(\`${path}\`${bodyParams ? `, body` : ''}${params ? `, { params }` : ''})
+  return requestClient.put(\`${path}\`${bodyParams ? `, body` : `${params ? ', null' : ''}`}${params ? ', { params, }' : ''})
 }`; // 有get参数时要添加到params
         }
         if (api.method.toUpperCase() === 'DELETE') {
           return `
 export async function ${functionName}(${params}${bodyParams ? `${params ? ',' : ''}${bodyParams}` : ''})${responseType} {
-  return requestClient.delete(\`${path}\`${bodyParams ? `, body` : ''})
+  return requestClient.delete(\`${path}\`${bodyParams ? `, body` : ''}${params ? ', { params, }' : ''})
 }`;
         }
         return '';
