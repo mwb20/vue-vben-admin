@@ -11,7 +11,7 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { loginApi, logoutApi, refreshTokenApi } from '#/api';
-import { applicationConfiguration } from '#/api/abp/index';
+import { getApplicationConfiguration } from '#/api/abp-client/abpApplicationConfiguration';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -96,10 +96,12 @@ export const useAuthStore = defineStore('auth', () => {
   async function fetchUserInfo() {
     let userInfo: null | UserInfo = null;
 
-    let config = await applicationConfiguration();
+    let config = await getApplicationConfiguration({
+      IncludeLocalizationResources: false,
+    });
 
     userInfo = {
-      realName: config.currentUser.name || config.currentUser.userName,
+      realName: config.currentUser?.name || config.currentUser?.userName || '',
     } as UserInfo;
 
     /* 获取到的用户昵称为空时刷新token，如果刷新失败跳转到登录页面 by mwb 2024年10月27日 */
@@ -114,9 +116,12 @@ export const useAuthStore = defineStore('auth', () => {
             accessStore.setRefreshToken(refresh_token);
           }
           // 刷新token后重新获取用户信息
-          config = await applicationConfiguration();
+          config = await getApplicationConfiguration({
+            IncludeLocalizationResources: false,
+          });
           userInfo = {
-            realName: config.currentUser.name,
+            realName:
+              config.currentUser?.name || config.currentUser?.userName || '',
           } as UserInfo;
         }
       } catch {}

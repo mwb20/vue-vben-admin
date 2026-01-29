@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { AccessControl } from '@vben/access';
 import { Page, useVbenModal } from '@vben/common-ui';
-import { LockKeyhole } from '@vben/icons';
 
 import { Button, Dropdown, Menu, MenuItem, Space, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteUser } from '#/api/abp-client';
 import { onAdd, onDel, onEdit } from '#/components/common/methods';
+import PermissionManage from '#/components/permission-manage/index.vue';
 
-import AddFormModal from './add.vue';
 import EditFormModal from './edit.vue';
 import { MainGridOptions, SearchFormOptions } from './schema';
 
@@ -21,11 +21,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
   separator: true,
 });
 
-const [AddModal, AddModalApi] = useVbenModal({
-  title: '新增用户',
-  connectedComponent: AddFormModal,
-});
-
 /**
  * @description: 配置编辑组件
  */
@@ -33,12 +28,21 @@ const [EditModal, EditModalApi] = useVbenModal({
   title: '编辑用户',
   connectedComponent: EditFormModal,
 });
+
 /**
- * @description: 启用/禁用
+ * @description: 配置权限组件
  */
-function onEnabled(row: any) {
-  // eslint-disable-next-line no-console
-  console.log(row);
+const [PermissionModal, PermissionModalApi] = useVbenModal({
+  title: '权限',
+  connectedComponent: PermissionManage,
+});
+
+/**
+ * @description: 权限
+ */
+function onPermission(id: string) {
+  PermissionModalApi.setData({ providerName: 'U', providerKey: id });
+  PermissionModalApi.open();
 }
 </script>
 
@@ -50,7 +54,7 @@ function onEnabled(row: any) {
           <Button
             type="primary"
             v-access:code="'AbpIdentity.Users.Create'"
-            @click="onAdd(AddModalApi)"
+            @click="onAdd(EditModalApi)"
           >
             新增
           </Button>
@@ -66,7 +70,7 @@ function onEnabled(row: any) {
             size="small"
             type="primary"
             v-access:code="'AbpIdentity.Users.Update'"
-            @click="onEdit(EditModalApi, row)"
+            @click="onEdit(EditModalApi, { id: row.id })"
           >
             {{ $t('abp.edit') }}
           </Button>
@@ -78,15 +82,17 @@ function onEnabled(row: any) {
             <template #overlay>
               <Menu>
                 <AccessControl
-                  :codes="['AbpIdentity.Users.Update']"
+                  :codes="['AbpIdentity.Users.ManagePermissions']"
                   type="code"
                 >
-                  <MenuItem key="0" @click="onEnabled(row)">
+                  <MenuItem
+                    key="2"
+                    @click="onPermission(row.id)"
+                    @reload="gridApi.reload"
+                  >
                     <span class="flex items-center">
-                      <LockKeyhole class="mr-2 size-4" />
-                      {{
-                        row.isActive ? $t('abp.disabled') : $t('abp.enabled')
-                      }}
+                      <i class="icon-[ic--baseline-lock-reset] mr-2 size-4"></i>
+                      {{ $t('abp.permissions') }}
                     </span>
                   </MenuItem>
                 </AccessControl>
@@ -94,23 +100,16 @@ function onEnabled(row: any) {
                   :codes="['AbpIdentity.Users.Delete']"
                   type="code"
                 >
-                  <MenuItem key="1" @click="onDel(row)">
+                  <MenuItem
+                    key="1"
+                    @click="onDel(gridApi, row, deleteUser)"
+                    @reload="gridApi.reload"
+                  >
                     <span class="flex items-center">
                       <i
                         class="icon-[material-symbols--delete-outline] mr-2 size-4"
                       ></i>
                       {{ $t('abp.delete') }}
-                    </span>
-                  </MenuItem>
-                </AccessControl>
-                <AccessControl
-                  :codes="['AbpIdentity.Users.Delete']"
-                  type="code"
-                >
-                  <MenuItem key="2" @click="onDel(row)">
-                    <span class="flex items-center">
-                      <i class="icon-[ic--baseline-lock-reset] mr-2 size-4"></i>
-                      {{ $t('abp.resetPassword') }}
                     </span>
                   </MenuItem>
                 </AccessControl>
@@ -120,7 +119,7 @@ function onEnabled(row: any) {
         </Space>
       </template>
     </Grid>
-    <AddModal />
     <EditModal @reload="gridApi.reload" />
+    <PermissionModal />
   </Page>
 </template>
