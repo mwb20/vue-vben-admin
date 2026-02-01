@@ -2,7 +2,15 @@
 import { AccessControl } from '@vben/access';
 import { Page, useVbenModal } from '@vben/common-ui';
 
-import { Button, Dropdown, Menu, MenuItem, Space, Tag } from 'ant-design-vue';
+import {
+  Button,
+  Dropdown,
+  Menu,
+  MenuItem,
+  message,
+  Space,
+  Tag,
+} from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteUser } from '#/api/abp-client';
@@ -40,7 +48,11 @@ const [PermissionModal, PermissionModalApi] = useVbenModal({
 /**
  * @description: 权限
  */
-function onPermission(id: string) {
+function onPermission(id: string | undefined) {
+  if (!id) {
+    message.error('请选择用户');
+    return;
+  }
   PermissionModalApi.setData({ providerName: 'U', providerKey: id });
   PermissionModalApi.open();
 }

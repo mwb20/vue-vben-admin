@@ -1,5 +1,7 @@
+import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
+import type { DeepPartial } from '@vben/types';
+
 import type { VbenFormProps } from '#/adapter/form';
-import type { VxeGridProps } from '#/adapter/vxe-table';
 
 import { z } from '#/adapter/form';
 import { requestClient } from '#/api/request';
@@ -50,7 +52,7 @@ export const SearchFormOptions: VbenFormProps = {
 /**
  * 主表格配置
  */
-export const MainGridOptions: VxeGridProps<RowType> = {
+export const MainGridOptions: DeepPartial<VxeTableGridOptions<RowType>> = {
   checkboxConfig: {
     highlight: true,
   },
@@ -112,7 +114,8 @@ export const MainGridOptions: VxeGridProps<RowType> = {
       total: 'totalCount',
     },
     ajax: {
-      query: async ({ page, sort }, formValues) => {
+      query: async (params: any, formValues: any[]) => {
+        const { sort, page } = params;
         return requestClient.get('/api/identity/users', {
           params: {
             filter: formValues.filter,
@@ -162,18 +165,10 @@ export const EditFormOptions: VbenFormProps = {
     {
       component: 'Input',
       componentProps: {
-        placeholder: '请输入姓氏',
-      },
-      fieldName: 'surname',
-      label: '姓',
-    },
-    {
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入名',
+        placeholder: '请输入姓名',
       },
       fieldName: 'name',
-      label: '名',
+      label: '姓名',
     },
     {
       component: 'Input',
