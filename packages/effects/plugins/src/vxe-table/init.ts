@@ -19,6 +19,9 @@ import {
   VxeModal,
   VxeNumberInput,
   VxePager,
+  // VxeSwitch,
+  // VxeTextarea,
+  VxePrint,
   // VxeList,
   // VxeModal,
   // VxeOptgroup,
@@ -31,8 +34,6 @@ import {
   VxeTooltip,
   VxeUI,
   VxeUpload,
-  // VxeSwitch,
-  // VxeTextarea,
 } from 'vxe-pc-ui';
 import enUS from 'vxe-pc-ui/lib/language/en-US';
 // 导入默认的语言
@@ -96,6 +97,7 @@ export function initVxeTable() {
   // VxeUI.component(VxeTextarea);
   VxeUI.component(VxeTooltip);
   VxeUI.component(VxeUpload);
+  VxeUI.component(VxePrint);
 
   isInit = true;
 }
