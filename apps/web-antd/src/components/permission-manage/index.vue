@@ -4,7 +4,6 @@ import type { DataNode, EventDataNode } from 'ant-design-vue/es/tree';
 import type {
   PermissionGrantInfoDto,
   PermissionGroupDto,
-  ProviderInfoDto,
   UpdatePermissionsDto,
 } from '#/api/abp-client';
 
@@ -322,22 +321,20 @@ function getTreeData(
         >
           <template #title="{ title, dataRef }">
             <span> {{ title }} </span>
-            <Tag
-              v-if="
-                hasUserPermission &&
-                dataRef.grantedProviders?.some(
-                  (x: ProviderInfoDto) => x.providerName === 'R',
-                )
-              "
-              color="purple"
-            >
-              角色：{{
-                dataRef.grantedProviders
-                  ?.filter((x: ProviderInfoDto) => x.providerName === 'R')
-                  ?.map((x: ProviderInfoDto) => x.providerKey)
-                  .join('')
-              }}
-            </Tag>
+            <template v-if="hasUserPermission">
+              <Tag
+                v-for="provider in dataRef.grantedProviders || []"
+                :key="provider.providerName"
+                color="purple"
+                style="margin: 0 0 0 8px"
+              >
+                {{
+                  provider.providerName === 'R'
+                    ? `角色：${provider.providerKey}`
+                    : '用户'
+                }}
+              </Tag>
+            </template>
           </template>
         </Tree>
       </TabPane>
