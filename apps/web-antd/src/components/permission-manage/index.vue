@@ -35,6 +35,10 @@ const checkedKeys = ref<{ checked: string[]; halfChecked: string[] }>({
   checked: [],
   halfChecked: [],
 });
+// 全选复选框状态，存储每个权限组的全选状态
+const selectAllStates = ref<
+  Record<string, { checked: boolean; indeterminate: boolean }>
+>({});
 
 const permissionsParams = ref<{
   providerKey: string;
@@ -81,6 +85,11 @@ const [PermissionModal, permissionModalApi] = useVbenModal({
       checkedKeys.value.checked = allPermissions.value
         .filter((permission) => permission.isGranted)
         .map((permission) => permission.name || '');
+
+      // 初始化全选状态
+      permissionGroups.value.forEach((group) => {
+        updateSelectAllState(group.name || '');
+      });
     });
   },
   onConfirm: async () => {
@@ -160,6 +169,100 @@ function handleCheck(
       (key) => !key.startsWith(permissionName),
     );
   }
+
+  // 更新所有权限组的全选状态
+  permissionGroups.value.forEach((group) => {
+    updateSelectAllState(group.name || '');
+  });
+}
+
+/**
+ * 获取当前权限组下所有可用的权限（排除禁用的权限）
+ * @param groupName 权限组名称
+ * @returns 可用权限列表
+ */
+function getAvailablePermissions(groupName: string): PermissionGrantInfoDto[] {
+  const group = permissionGroups.value.find((g) => g.name === groupName);
+  if (!group) return [];
+
+  return (group.permissions || []).filter((permission) => {
+    // 如果是用户权限，排除角色权限
+    if (hasUserPermission.value) {
+      return !permission.grantedProviders?.some((x) => x.providerName === 'R');
+    }
+    return true;
+  });
+}
+
+/**
+ * 更新全选复选框状态
+ * @param groupName 权限组名称
+ */
+function updateSelectAllState(groupName: string) {
+  const availablePermissions = getAvailablePermissions(groupName);
+  const availablePermissionKeys = availablePermissions.map((p) => p.name || '');
+
+  // 获取当前选中的可用权限
+  const checkedAvailablePermissions = checkedKeys.value.checked.filter((key) =>
+    availablePermissionKeys.includes(key),
+  );
+
+  // 计算选中状态
+  const checkedCount = checkedAvailablePermissions.length;
+  const totalCount = availablePermissionKeys.length;
+
+  if (totalCount === 0) {
+    selectAllStates.value[groupName] = { checked: false, indeterminate: false };
+    return;
+  }
+
+  if (checkedCount === 0) {
+    // 没有选中任何权限
+    selectAllStates.value[groupName] = { checked: false, indeterminate: false };
+  } else if (checkedCount === totalCount) {
+    // 全部权限都选中了
+    selectAllStates.value[groupName] = { checked: true, indeterminate: false };
+  } else {
+    // 部分权限选中
+    selectAllStates.value[groupName] = { checked: false, indeterminate: true };
+  }
+}
+
+/**
+ * 处理全选复选框点击事件
+ * @param groupName 权限组名称
+ * @param checked 选中状态
+ */
+function handleSelectAll(groupName: string, checked: boolean) {
+  const availablePermissions = getAvailablePermissions(groupName);
+  const availablePermissionKeys = availablePermissions.map((p) => p.name || '');
+
+  // 检查是否所有权限都被禁用
+  if (availablePermissionKeys.length === 0) {
+    message.info(
+      '当前分组所有权限都继承自角色权限，若要取消请通过角色设置或联系管理员',
+    );
+    return;
+  }
+
+  if (checked) {
+    // 全选：添加所有可用权限
+    const newCheckedKeys = [...checkedKeys.value.checked];
+    availablePermissionKeys.forEach((key) => {
+      if (!newCheckedKeys.includes(key)) {
+        newCheckedKeys.push(key);
+      }
+    });
+    checkedKeys.value.checked = newCheckedKeys;
+  } else {
+    // 取消全选：移除所有可用权限
+    checkedKeys.value.checked = checkedKeys.value.checked.filter(
+      (key) => !availablePermissionKeys.includes(key),
+    );
+  }
+
+  // 更新全选状态
+  updateSelectAllState(groupName);
 }
 
 /**
@@ -197,8 +300,17 @@ function getTreeData(
         :key="item.name"
       >
         <!-- 使用选择框勾选时全选当前分组下所有权限，取消时取消当前分组下所有权限 -->
-        <Checkbox size="small"> 全选 </Checkbox>
-        <Divider style="margin: 10px 0" />
+        <Checkbox
+          size="small"
+          :checked="selectAllStates[item.name || '']?.checked || false"
+          :indeterminate="
+            selectAllStates[item.name || '']?.indeterminate || false
+          "
+          @change="(e) => handleSelectAll(item.name || '', e.target.checked)"
+        >
+          全选
+        </Checkbox>
+        <Divider style="margin: 12px 0" />
         <!-- 以树形展示分组下的权限 -->
         <Tree
           :tree-data="getTreeData(item.permissions || [], null)"
