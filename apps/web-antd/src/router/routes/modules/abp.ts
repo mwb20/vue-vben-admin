@@ -1,13 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { BasicLayout, IFrameView } from '#/layouts';
+import { BasicLayout } from '#/layouts';
 import { $t } from '#/locales';
 
 const routes: RouteRecordRaw[] = [
   {
     component: BasicLayout,
     meta: {
-      badgeType: 'dot',
       icon: 'lucide:book-open-text',
       order: 9999,
       title: $t('abp.systemManage'),
@@ -26,13 +25,13 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: 'abptest2',
-        path: '/system/test2',
-        component: IFrameView,
+        name: 'roleManage',
+        path: '/system/roles',
+        component: () => import('#/views/system/role/index.vue'),
         meta: {
           icon: 'lucide:book-open-text',
-          link: 'https://www.baidu.com',
-          title: $t('abp.test2'),
+          title: $t('abp.roleManage'),
+          authority: ['AbpIdentity.Roles'],
         },
       },
     ],
