@@ -4,6 +4,7 @@ import type { DataNode, EventDataNode } from 'ant-design-vue/es/tree';
 import type {
   PermissionGrantInfoDto,
   PermissionGroupDto,
+  ProviderInfoDto,
   UpdatePermissionsDto,
 } from '#/api/abp-client';
 
@@ -11,7 +12,15 @@ import { ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { message, TabPane, Tabs, Tree } from 'ant-design-vue';
+import {
+  Checkbox,
+  Divider,
+  message,
+  TabPane,
+  Tabs,
+  Tag,
+  Tree,
+} from 'ant-design-vue';
 
 import { getPermissions, updatePermissions } from '#/api/abp-client';
 
@@ -34,6 +43,7 @@ const permissionsParams = ref<{
   providerName: '',
   providerKey: '',
 });
+const hasUserPermission = ref<boolean>(false);
 
 // 或者在获取数据后设置默认激活的标签页
 const [PermissionModal, permissionModalApi] = useVbenModal({
@@ -50,6 +60,8 @@ const [PermissionModal, permissionModalApi] = useVbenModal({
     const value = permissionModalApi.getData<Record<string, any>>();
     permissionsParams.value.providerName = value.providerName;
     permissionsParams.value.providerKey = value.providerKey;
+    // 检查是否为用户权限
+    hasUserPermission.value = permissionsParams.value.providerName === 'U';
 
     // 调用Api获取权限
     getPermissions(permissionsParams.value).then((res) => {
@@ -170,6 +182,9 @@ function getTreeData(
     key: node.name || '',
     title: node.displayName || node.name || '',
     children: getTreeData(permissions, node.name || ''),
+    disableCheckbox:
+      hasUserPermission.value &&
+      node.grantedProviders?.some((x) => x.providerName === 'R'), // 禁用角色权限的复选框
   }));
 }
 </script>
@@ -181,6 +196,9 @@ function getTreeData(
         :tab="item.displayName"
         :key="item.name"
       >
+        <!-- 使用选择框勾选时全选当前分组下所有权限，取消时取消当前分组下所有权限 -->
+        <Checkbox size="small"> 全选 </Checkbox>
+        <Divider style="margin: 10px 0" />
         <!-- 以树形展示分组下的权限 -->
         <Tree
           :tree-data="getTreeData(item.permissions || [], null)"
@@ -189,7 +207,27 @@ function getTreeData(
           :default-expand-all="true"
           v-model:checked-keys="checkedKeys"
           @check="handleCheck"
-        />
+        >
+          <template #title="{ title, dataRef }">
+            <span> {{ title }} </span>
+            <Tag
+              v-if="
+                hasUserPermission &&
+                dataRef.grantedProviders?.some(
+                  (x: ProviderInfoDto) => x.providerName === 'R',
+                )
+              "
+              color="purple"
+            >
+              角色：{{
+                dataRef.grantedProviders
+                  ?.filter((x: ProviderInfoDto) => x.providerName === 'R')
+                  ?.map((x: ProviderInfoDto) => x.providerKey)
+                  .join('')
+              }}
+            </Tag>
+          </template>
+        </Tree>
       </TabPane>
     </Tabs>
   </PermissionModal>
