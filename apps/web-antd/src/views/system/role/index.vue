@@ -5,8 +5,8 @@ import { Button, message, Space, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteRole } from '#/api/abp-client';
-import { onAdd, onDel, onEdit } from '#/components/common/methods';
 import PermissionManage from '#/components/permission-manage/index.vue';
+import { onAdd, onDel, onEdit } from '#/utils/common-methods';
 
 import EditFormModal from './edit.vue';
 import { MainGridOptions, SearchFormOptions } from './schema';

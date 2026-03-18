@@ -21,7 +21,7 @@ import {
   getUserRoles,
   updateUser,
 } from '#/api/abp-client/index';
-import { onAddConfirm, onEditConfirm } from '#/components/common/methods';
+import { onAddConfirm, onEditConfirm } from '#/utils/common-methods';
 
 import { EditFormOptions } from './schema';
 

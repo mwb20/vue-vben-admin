@@ -14,8 +14,8 @@ import {
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteUser } from '#/api/abp-client';
-import { onAdd, onDel, onEdit } from '#/components/common/methods';
 import PermissionManage from '#/components/permission-manage/index.vue';
+import { onAdd, onDel, onEdit } from '#/utils/common-methods';
 
 import EditFormModal from './edit.vue';
 import { MainGridOptions, SearchFormOptions } from './schema';

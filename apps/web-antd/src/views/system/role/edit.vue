@@ -10,7 +10,7 @@ import { useVbenModal } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createRole, getRole, updateRole } from '#/api/abp-client/index';
-import { onAddConfirm, onEditConfirm } from '#/components/common/methods';
+import { onAddConfirm, onEditConfirm } from '#/utils/common-methods';
 
 import { EditFormOptions } from './schema';
 
