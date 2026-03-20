@@ -1,12 +1,11 @@
-export * from './types';
-export * from './displayEnumLabel';
-
 export * from './abpApiDefinition';
 export * from './abpApplicationConfiguration';
+
 export * from './abpApplicationLocalization';
 export * from './abpTenant';
 export * from './account';
 export * from './dictionaries';
+export * from './displayEnumLabel';
 export * from './dynamicClaims';
 export * from './emailSettings';
 export * from './features';
@@ -16,5 +15,6 @@ export * from './profile';
 export * from './role';
 export * from './tenant';
 export * from './timeZoneSettings';
+export * from './types';
 export * from './user';
 export * from './userLookup';

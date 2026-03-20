@@ -105,8 +105,8 @@ export type AbpApplicationLocalizationUsingGetResponses = {
 };
 
 export type AbpLoginResult = {
-  result?: LoginResultType;
   description?: string;
+  result?: LoginResultType;
 };
 
 export type AbpMultiTenancyTenantsByIdIdUsingGetParams = {
@@ -541,16 +541,16 @@ export type AccountVerifyPasswordResetTokenUsingPostResponses = {
 };
 
 export type ActionApiDescriptionModel = {
-  uniqueName?: string;
-  name?: string;
-  httpMethod?: string;
-  url?: string;
-  supportedVersions?: string[];
-  parametersOnMethod?: MethodParameterApiDescriptionModel[];
-  parameters?: ParameterApiDescriptionModel[];
-  returnValue?: ReturnValueApiDescriptionModel;
   allowAnonymous?: boolean;
+  httpMethod?: string;
   implementFrom?: string;
+  name?: string;
+  parameters?: ParameterApiDescriptionModel[];
+  parametersOnMethod?: MethodParameterApiDescriptionModel[];
+  returnValue?: ReturnValueApiDescriptionModel;
+  supportedVersions?: string[];
+  uniqueName?: string;
+  url?: string;
 };
 
 export type ApplicationApiDescriptionModel = {
@@ -563,18 +563,18 @@ export type ApplicationAuthConfigurationDto = {
 };
 
 export type ApplicationConfigurationDto = {
-  localization?: ApplicationLocalizationConfigurationDto;
   auth?: ApplicationAuthConfigurationDto;
-  setting?: ApplicationSettingConfigurationDto;
+  clock?: ClockDto;
+  currentTenant?: CurrentTenantDto;
   currentUser?: CurrentUserDto;
+  extraProperties?: Record<string, unknown>;
   features?: ApplicationFeatureConfigurationDto;
   globalFeatures?: ApplicationGlobalFeatureConfigurationDto;
+  localization?: ApplicationLocalizationConfigurationDto;
   multiTenancy?: MultiTenancyInfoDto;
-  currentTenant?: CurrentTenantDto;
-  timing?: TimingDto;
-  clock?: ClockDto;
   objectExtensions?: ObjectExtensionsDto;
-  extraProperties?: Record<string, unknown>;
+  setting?: ApplicationSettingConfigurationDto;
+  timing?: TimingDto;
 };
 
 export type ApplicationFeatureConfigurationDto = {
@@ -586,23 +586,23 @@ export type ApplicationGlobalFeatureConfigurationDto = {
 };
 
 export type ApplicationLocalizationConfigurationDto = {
-  values?: Record<string, Record<string, string>>;
-  resources?: Record<string, ApplicationLocalizationResourceDto>;
-  languages?: LanguageInfo[];
   currentCulture?: CurrentCultureDto;
   defaultResourceName?: string;
-  languagesMap?: Record<string, NameValue[]>;
   languageFilesMap?: Record<string, NameValue[]>;
+  languages?: LanguageInfo[];
+  languagesMap?: Record<string, NameValue[]>;
+  resources?: Record<string, ApplicationLocalizationResourceDto>;
+  values?: Record<string, Record<string, string>>;
 };
 
 export type ApplicationLocalizationDto = {
-  resources?: Record<string, ApplicationLocalizationResourceDto>;
   currentCulture?: CurrentCultureDto;
+  resources?: Record<string, ApplicationLocalizationResourceDto>;
 };
 
 export type ApplicationLocalizationResourceDto = {
-  texts?: Record<string, string>;
   baseResources?: string[];
+  texts?: Record<string, string>;
 };
 
 export type ApplicationSettingConfigurationDto = {
@@ -619,83 +619,83 @@ export type ClockDto = {
 };
 
 export type ControllerApiDescriptionModel = {
-  controllerName?: string;
-  controllerGroupName?: string;
-  isRemoteService?: boolean;
-  isIntegrationService?: boolean;
-  apiVersion?: string;
-  type?: string;
-  interfaces?: ControllerInterfaceApiDescriptionModel[];
   actions?: Record<string, ActionApiDescriptionModel>;
+  apiVersion?: string;
+  controllerGroupName?: string;
+  controllerName?: string;
+  interfaces?: ControllerInterfaceApiDescriptionModel[];
+  isIntegrationService?: boolean;
+  isRemoteService?: boolean;
+  type?: string;
 };
 
 export type ControllerInterfaceApiDescriptionModel = {
-  type?: string;
-  name?: string;
   methods?: InterfaceMethodApiDescriptionModel[];
+  name?: string;
+  type?: string;
 };
 
 export type CreateUpdateDataDictionariesDto = {
-  parentId?: string;
   code?: string;
-  name?: string;
-  value?: string;
-  sort?: number;
-  isActive?: boolean;
   description?: string;
+  isActive?: boolean;
+  name?: string;
+  parentId?: string;
+  sort?: number;
+  value?: string;
 };
 
 export type CurrentCultureDto = {
+  cultureName?: string;
+  dateTimeFormat?: DateTimeFormatDto;
   displayName?: string;
   englishName?: string;
-  threeLetterIsoLanguageName?: string;
-  twoLetterIsoLanguageName?: string;
   isRightToLeft?: boolean;
-  cultureName?: string;
   name?: string;
   nativeName?: string;
-  dateTimeFormat?: DateTimeFormatDto;
+  threeLetterIsoLanguageName?: string;
+  twoLetterIsoLanguageName?: string;
 };
 
 export type CurrentTenantDto = {
   id?: string;
-  name?: string;
   isAvailable?: boolean;
+  name?: string;
 };
 
 export type CurrentUserDto = {
-  isAuthenticated?: boolean;
-  id?: string;
-  tenantId?: string;
-  impersonatorUserId?: string;
-  impersonatorTenantId?: string;
-  impersonatorUserName?: string;
-  impersonatorTenantName?: string;
-  userName?: string;
-  name?: string;
-  surName?: string;
   email?: string;
   emailVerified?: boolean;
+  id?: string;
+  impersonatorTenantId?: string;
+  impersonatorTenantName?: string;
+  impersonatorUserId?: string;
+  impersonatorUserName?: string;
+  isAuthenticated?: boolean;
+  name?: string;
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
   roles?: string[];
   sessionId?: string;
+  surName?: string;
+  tenantId?: string;
+  userName?: string;
 };
 
 export type DataDictionariesDto = {
-  id?: string;
+  code?: string;
   creationTime?: string;
   creatorId?: string;
+  description?: string;
+  hasChildren?: boolean;
+  id?: string;
+  isActive?: boolean;
   lastModificationTime?: string;
   lastModifierId?: string;
-  parentId?: string;
-  code?: string;
   name?: string;
-  value?: string;
+  parentId?: string;
   sort?: number;
-  isActive?: boolean;
-  hasChildren?: boolean;
-  description?: string;
+  value?: string;
 };
 
 export type DataDictionaryDictionariesChildrenUsingGetParams = {
@@ -844,8 +844,8 @@ export type DataDictionaryDictionariesUsingDeleteResponses = {
 
 export type DataDictionaryDictionariesUsingGetParams = {
   Filter?: string;
-  SkipCount?: number;
   MaxResultCount?: number;
+  SkipCount?: number;
 };
 
 export type DataDictionaryDictionariesUsingGetResponses = {
@@ -947,29 +947,29 @@ export type DataDictionaryDictionariesUsingPutResponses = {
 
 export type DateTimeFormatDto = {
   calendarAlgorithmType?: string;
-  dateTimeFormatLong?: string;
-  shortDatePattern?: string;
-  fullDateTimePattern?: string;
   dateSeparator?: string;
-  shortTimePattern?: string;
+  dateTimeFormatLong?: string;
+  fullDateTimePattern?: string;
   longTimePattern?: string;
+  shortDatePattern?: string;
+  shortTimePattern?: string;
 };
 
 export type EmailSettingsDto = {
-  smtpHost?: string;
-  smtpPort?: number;
-  smtpUserName?: string;
-  smtpPassword?: string;
-  smtpDomain?: string;
-  smtpEnableSsl?: boolean;
-  smtpUseDefaultCredentials?: boolean;
   defaultFromAddress?: string;
   defaultFromDisplayName?: string;
+  smtpDomain?: string;
+  smtpEnableSsl?: boolean;
+  smtpHost?: string;
+  smtpPassword?: string;
+  smtpPort?: number;
+  smtpUseDefaultCredentials?: boolean;
+  smtpUserName?: string;
 };
 
 export type EntityExtensionDto = {
-  properties?: Record<string, ExtensionPropertyDto>;
   configuration?: Record<string, unknown>;
+  properties?: Record<string, ExtensionPropertyDto>;
 };
 
 export type ExtensionEnumDto = {
@@ -987,8 +987,8 @@ export type ExtensionPropertyApiCreateDto = {
 };
 
 export type ExtensionPropertyApiDto = {
-  onGet?: ExtensionPropertyApiGetDto;
   onCreate?: ExtensionPropertyApiCreateDto;
+  onGet?: ExtensionPropertyApiGetDto;
   onUpdate?: ExtensionPropertyApiUpdateDto;
 };
 
@@ -1001,20 +1001,20 @@ export type ExtensionPropertyApiUpdateDto = {
 };
 
 export type ExtensionPropertyAttributeDto = {
-  typeSimple?: string;
   config?: Record<string, unknown>;
+  typeSimple?: string;
 };
 
 export type ExtensionPropertyDto = {
-  type?: string;
-  typeSimple?: string;
-  displayName?: LocalizableStringDto;
   api?: ExtensionPropertyApiDto;
-  ui?: ExtensionPropertyUiDto;
-  policy?: ExtensionPropertyPolicyDto;
   attributes?: ExtensionPropertyAttributeDto[];
   configuration?: Record<string, unknown>;
   defaultValue?: unknown;
+  displayName?: LocalizableStringDto;
+  policy?: ExtensionPropertyPolicyDto;
+  type?: string;
+  typeSimple?: string;
+  ui?: ExtensionPropertyUiDto;
 };
 
 export type ExtensionPropertyFeaturePolicyDto = {
@@ -1033,16 +1033,16 @@ export type ExtensionPropertyPermissionPolicyDto = {
 };
 
 export type ExtensionPropertyPolicyDto = {
-  globalFeatures?: ExtensionPropertyGlobalFeaturePolicyDto;
   features?: ExtensionPropertyFeaturePolicyDto;
+  globalFeatures?: ExtensionPropertyGlobalFeaturePolicyDto;
   permissions?: ExtensionPropertyPermissionPolicyDto;
 };
 
 export type ExtensionPropertyUiDto = {
-  onTable?: ExtensionPropertyUiTableDto;
+  lookup?: ExtensionPropertyUiLookupDto;
   onCreateForm?: ExtensionPropertyUiFormDto;
   onEditForm?: ExtensionPropertyUiFormDto;
-  lookup?: ExtensionPropertyUiLookupDto;
+  onTable?: ExtensionPropertyUiTableDto;
 };
 
 export type ExtensionPropertyUiFormDto = {
@@ -1050,11 +1050,11 @@ export type ExtensionPropertyUiFormDto = {
 };
 
 export type ExtensionPropertyUiLookupDto = {
-  url?: string;
-  resultListPropertyName?: string;
   displayPropertyName?: string;
-  valuePropertyName?: string;
   filterParamName?: string;
+  resultListPropertyName?: string;
+  url?: string;
+  valuePropertyName?: string;
 };
 
 export type ExtensionPropertyUiTableDto = {
@@ -1062,25 +1062,25 @@ export type ExtensionPropertyUiTableDto = {
 };
 
 export type FeatureDto = {
-  name?: string;
-  displayName?: string;
-  value?: string;
-  provider?: FeatureProviderDto;
-  description?: string;
-  valueType?: IStringValueType;
   depth?: number;
+  description?: string;
+  displayName?: string;
+  name?: string;
   parentName?: string;
+  provider?: FeatureProviderDto;
+  value?: string;
+  valueType?: IStringValueType;
 };
 
 export type FeatureGroupDto = {
-  name?: string;
   displayName?: string;
   features?: FeatureDto[];
+  name?: string;
 };
 
 export type FeatureManagementFeaturesUsingDeleteParams = {
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type FeatureManagementFeaturesUsingDeleteResponses = {
@@ -1119,8 +1119,8 @@ export type FeatureManagementFeaturesUsingDeleteResponses = {
 };
 
 export type FeatureManagementFeaturesUsingGetParams = {
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type FeatureManagementFeaturesUsingGetResponses = {
@@ -1155,8 +1155,8 @@ export type FeatureManagementFeaturesUsingGetResponses = {
 };
 
 export type FeatureManagementFeaturesUsingPutParams = {
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type FeatureManagementFeaturesUsingPutResponses = {
@@ -1195,23 +1195,23 @@ export type FeatureManagementFeaturesUsingPutResponses = {
 };
 
 export type FeatureProviderDto = {
-  name?: string;
   key?: string;
+  name?: string;
 };
 
 export type FindTenantResultDto = {
-  success?: boolean;
-  tenantId?: string;
+  isActive?: boolean;
   name?: string;
   normalizedName?: string;
-  isActive?: boolean;
+  success?: boolean;
+  tenantId?: string;
 };
 
 export type GetDataDictionariesForTreeOutput = {
   code?: string;
+  hasChildren?: boolean;
   name?: string;
   value?: string;
-  hasChildren?: boolean;
 };
 
 export type GetFeatureListResultDto = {
@@ -1240,8 +1240,8 @@ export type GetResourceProviderListResultDto = {
 };
 
 export type GrantedResourcePermissionDto = {
-  name?: string;
   displayName?: string;
+  name?: string;
 };
 
 export type IanaTimeZone = {
@@ -1250,20 +1250,20 @@ export type IanaTimeZone = {
 
 export type IdentityRoleCreateDto = {
   extraProperties?: Record<string, unknown>;
-  name: string;
   isDefault?: boolean;
   isPublic?: boolean;
+  name: string;
 };
 
 export type IdentityRoleDto = {
-  extraProperties?: Record<string, unknown>;
-  id?: string;
-  name?: string;
-  isDefault?: boolean;
-  isStatic?: boolean;
-  isPublic?: boolean;
   concurrencyStamp?: string;
   creationTime?: string;
+  extraProperties?: Record<string, unknown>;
+  id?: string;
+  isDefault?: boolean;
+  isPublic?: boolean;
+  isStatic?: boolean;
+  name?: string;
 };
 
 export type IdentityRolesAllUsingGetResponses = {
@@ -1407,11 +1407,11 @@ export type IdentityRolesIdUsingPutResponses = {
 };
 
 export type IdentityRolesUsingGetParams = {
-  Filter?: string;
-  Sorting?: string;
-  SkipCount?: number;
-  MaxResultCount?: number;
   ExtraProperties?: Record<string, unknown>;
+  Filter?: string;
+  MaxResultCount?: number;
+  SkipCount?: number;
+  Sorting?: string;
 };
 
 export type IdentityRolesUsingGetResponses = {
@@ -1477,51 +1477,51 @@ export type IdentityRolesUsingPostResponses = {
 };
 
 export type IdentityRoleUpdateDto = {
+  concurrencyStamp?: string;
   extraProperties?: Record<string, unknown>;
-  name: string;
   isDefault?: boolean;
   isPublic?: boolean;
-  concurrencyStamp?: string;
+  name: string;
 };
 
 export type IdentityUserCreateDto = {
-  extraProperties?: Record<string, unknown>;
-  userName: string;
-  name?: string;
-  surname?: string;
   email: string;
-  phoneNumber?: string;
+  extraProperties?: Record<string, unknown>;
   isActive?: boolean;
   lockoutEnabled?: boolean;
-  roleNames?: string[];
+  name?: string;
   password: string;
+  phoneNumber?: string;
+  roleNames?: string[];
+  surname?: string;
+  userName: string;
 };
 
 export type IdentityUserDto = {
-  extraProperties?: Record<string, unknown>;
-  id?: string;
+  accessFailedCount?: number;
+  concurrencyStamp?: string;
   creationTime?: string;
   creatorId?: string;
-  lastModificationTime?: string;
-  lastModifierId?: string;
-  isDeleted?: boolean;
   deleterId?: string;
   deletionTime?: string;
-  tenantId?: string;
-  userName?: string;
-  name?: string;
-  surname?: string;
   email?: string;
   emailConfirmed?: boolean;
+  entityVersion?: number;
+  extraProperties?: Record<string, unknown>;
+  id?: string;
+  isActive?: boolean;
+  isDeleted?: boolean;
+  lastModificationTime?: string;
+  lastModifierId?: string;
+  lastPasswordChangeTime?: string;
+  lockoutEnabled?: boolean;
+  lockoutEnd?: string;
+  name?: string;
   phoneNumber?: string;
   phoneNumberConfirmed?: boolean;
-  isActive?: boolean;
-  lockoutEnabled?: boolean;
-  accessFailedCount?: number;
-  lockoutEnd?: string;
-  concurrencyStamp?: string;
-  entityVersion?: number;
-  lastPasswordChangeTime?: string;
+  surname?: string;
+  tenantId?: string;
+  userName?: string;
 };
 
 export type IdentityUsersAssignableRolesUsingGetResponses = {
@@ -1914,11 +1914,11 @@ export type IdentityUsersLookupIdUsingGetResponses = {
 };
 
 export type IdentityUsersLookupSearchUsingGetParams = {
-  Filter?: string;
-  Sorting?: string;
-  SkipCount?: number;
-  MaxResultCount?: number;
   ExtraProperties?: Record<string, unknown>;
+  Filter?: string;
+  MaxResultCount?: number;
+  SkipCount?: number;
+  Sorting?: string;
 };
 
 export type IdentityUsersLookupSearchUsingGetResponses = {
@@ -1953,11 +1953,11 @@ export type IdentityUsersLookupSearchUsingGetResponses = {
 };
 
 export type IdentityUsersUsingGetParams = {
-  Filter?: string;
-  Sorting?: string;
-  SkipCount?: number;
-  MaxResultCount?: number;
   ExtraProperties?: Record<string, unknown>;
+  Filter?: string;
+  MaxResultCount?: number;
+  SkipCount?: number;
+  Sorting?: string;
 };
 
 export type IdentityUsersUsingGetResponses = {
@@ -2023,17 +2023,17 @@ export type IdentityUsersUsingPostResponses = {
 };
 
 export type IdentityUserUpdateDto = {
-  extraProperties?: Record<string, unknown>;
-  userName: string;
-  name?: string;
-  surname?: string;
+  concurrencyStamp?: string;
   email: string;
-  phoneNumber?: string;
+  extraProperties?: Record<string, unknown>;
   isActive?: boolean;
   lockoutEnabled?: boolean;
-  roleNames?: string[];
+  name?: string;
   password?: string;
-  concurrencyStamp?: string;
+  phoneNumber?: string;
+  roleNames?: string[];
+  surname?: string;
+  userName: string;
 };
 
 export type IdentityUserUpdateRolesDto = {
@@ -2059,9 +2059,9 @@ export type IValueValidator = {
 
 export type LanguageInfo = {
   cultureName?: string;
-  uiCultureName?: string;
   displayName?: string;
   twoLetterISOLanguageName?: string;
+  uiCultureName?: string;
 };
 
 export type ListResultDto1IdentityRoleDto = {
@@ -2088,23 +2088,23 @@ export enum LoginResultType {
 export type ILoginResultType = keyof typeof LoginResultType;
 
 export type MethodParameterApiDescriptionModel = {
-  name?: string;
-  typeAsString?: string;
-  type?: string;
-  typeSimple?: string;
-  isOptional?: boolean;
   defaultValue?: unknown;
+  isOptional?: boolean;
+  name?: string;
+  type?: string;
+  typeAsString?: string;
+  typeSimple?: string;
 };
 
 export type ModuleApiDescriptionModel = {
-  rootPath?: string;
-  remoteServiceName?: string;
   controllers?: Record<string, ControllerApiDescriptionModel>;
+  remoteServiceName?: string;
+  rootPath?: string;
 };
 
 export type ModuleExtensionDto = {
-  entities?: Record<string, EntityExtensionDto>;
   configuration?: Record<string, unknown>;
+  entities?: Record<string, EntityExtensionDto>;
 };
 
 export type MultiTenancyInfoDto = {
@@ -2186,8 +2186,8 @@ export type MultiTenancyTenantsIdDefaultConnectionStringUsingGetResponses = {
 };
 
 export type MultiTenancyTenantsIdDefaultConnectionStringUsingPutParams = {
-  id: string;
   defaultConnectionString?: string;
+  id: string;
 };
 
 export type MultiTenancyTenantsIdDefaultConnectionStringUsingPutResponses = {
@@ -2336,9 +2336,9 @@ export type MultiTenancyTenantsIdUsingPutResponses = {
 
 export type MultiTenancyTenantsUsingGetParams = {
   Filter?: string;
-  Sorting?: string;
-  SkipCount?: number;
   MaxResultCount?: number;
+  SkipCount?: number;
+  Sorting?: string;
 };
 
 export type MultiTenancyTenantsUsingGetResponses = {
@@ -2409,8 +2409,8 @@ export type NameValue = {
 };
 
 export type ObjectExtensionsDto = {
-  modules?: Record<string, ModuleExtensionDto>;
   enums?: Record<string, ExtensionEnumDto>;
+  modules?: Record<string, ModuleExtensionDto>;
 };
 
 export type PagedResultDto1DataDictionariesDto = {
@@ -2434,39 +2434,39 @@ export type PagedResultDto1TenantDto = {
 };
 
 export type ParameterApiDescriptionModel = {
-  nameOnMethod?: string;
-  name?: string;
+  bindingSourceId?: string;
+  constraintTypes?: string[];
+  defaultValue?: unknown;
+  descriptorName?: string;
+  isOptional?: boolean;
   jsonName?: string;
+  name?: string;
+  nameOnMethod?: string;
   type?: string;
   typeSimple?: string;
-  isOptional?: boolean;
-  defaultValue?: unknown;
-  constraintTypes?: string[];
-  bindingSourceId?: string;
-  descriptorName?: string;
 };
 
 export type PermissionGrantInfoDto = {
-  name?: string;
-  displayName?: string;
-  parentName?: string;
-  isGranted?: boolean;
   allowedProviders?: string[];
+  displayName?: string;
   grantedProviders?: ProviderInfoDto[];
+  isGranted?: boolean;
+  name?: string;
+  parentName?: string;
 };
 
 export type PermissionGroupDto = {
-  name?: string;
   displayName?: string;
   displayNameKey?: string;
   displayNameResource?: string;
+  name?: string;
   permissions?: PermissionGrantInfoDto[];
 };
 
 export type PermissionManagementPermissionsByGroupUsingGetParams = {
   groupName?: string;
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type PermissionManagementPermissionsByGroupUsingGetResponses = {
@@ -2501,10 +2501,10 @@ export type PermissionManagementPermissionsByGroupUsingGetResponses = {
 };
 
 export type PermissionManagementPermissionsResourceByProviderUsingGetParams = {
-  resourceName?: string;
-  resourceKey?: string;
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
+  resourceKey?: string;
+  resourceName?: string;
 };
 
 export type PermissionManagementPermissionsResourceByProviderUsingGetResponses =
@@ -2613,10 +2613,10 @@ export type PermissionManagementPermissionsResourceProviderKeyLookupServicesUsin
   };
 
 export type PermissionManagementPermissionsResourceUsingDeleteParams = {
-  resourceName?: string;
-  resourceKey?: string;
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
+  resourceKey?: string;
+  resourceName?: string;
 };
 
 export type PermissionManagementPermissionsResourceUsingDeleteResponses = {
@@ -2655,8 +2655,8 @@ export type PermissionManagementPermissionsResourceUsingDeleteResponses = {
 };
 
 export type PermissionManagementPermissionsResourceUsingGetParams = {
-  resourceName?: string;
   resourceKey?: string;
+  resourceName?: string;
 };
 
 export type PermissionManagementPermissionsResourceUsingGetResponses = {
@@ -2691,8 +2691,8 @@ export type PermissionManagementPermissionsResourceUsingGetResponses = {
 };
 
 export type PermissionManagementPermissionsResourceUsingPutParams = {
-  resourceName?: string;
   resourceKey?: string;
+  resourceName?: string;
 };
 
 export type PermissionManagementPermissionsResourceUsingPutResponses = {
@@ -2732,10 +2732,10 @@ export type PermissionManagementPermissionsResourceUsingPutResponses = {
 
 export type PermissionManagementPermissionsSearchResourceProviderKeysUsingGetParams =
   {
-    resourceName?: string;
-    serviceName?: string;
     filter?: string;
     page?: number;
+    resourceName?: string;
+    serviceName?: string;
   };
 
 export type PermissionManagementPermissionsSearchResourceProviderKeysUsingGetResponses =
@@ -2771,8 +2771,8 @@ export type PermissionManagementPermissionsSearchResourceProviderKeysUsingGetRes
   };
 
 export type PermissionManagementPermissionsUsingGetParams = {
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type PermissionManagementPermissionsUsingGetResponses = {
@@ -2807,8 +2807,8 @@ export type PermissionManagementPermissionsUsingGetResponses = {
 };
 
 export type PermissionManagementPermissionsUsingPutParams = {
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type PermissionManagementPermissionsUsingPutResponses = {
@@ -2847,49 +2847,49 @@ export type PermissionManagementPermissionsUsingPutResponses = {
 };
 
 export type ProfileDto = {
-  extraProperties?: Record<string, unknown>;
-  userName?: string;
-  email?: string;
-  name?: string;
-  surname?: string;
-  phoneNumber?: string;
-  isExternal?: boolean;
-  hasPassword?: boolean;
   concurrencyStamp?: string;
+  email?: string;
+  extraProperties?: Record<string, unknown>;
+  hasPassword?: boolean;
+  isExternal?: boolean;
+  name?: string;
+  phoneNumber?: string;
+  surname?: string;
+  userName?: string;
 };
 
 export type PropertyApiDescriptionModel = {
-  name?: string;
-  jsonName?: string;
-  type?: string;
-  typeSimple?: string;
+  isNullable?: boolean;
   isRequired?: boolean;
-  minLength?: number;
+  jsonName?: string;
+  maximum?: string;
   maxLength?: number;
   minimum?: string;
-  maximum?: string;
+  minLength?: number;
+  name?: string;
   regex?: string;
-  isNullable?: boolean;
+  type?: string;
+  typeSimple?: string;
 };
 
 export type ProviderInfoDto = {
-  providerName?: string;
   providerKey?: string;
+  providerName?: string;
 };
 
 export type RegisterDto = {
-  extraProperties?: Record<string, unknown>;
-  userName: string;
-  emailAddress: string;
-  password: string;
   appName: string;
+  emailAddress: string;
+  extraProperties?: Record<string, unknown>;
+  password: string;
+  userName: string;
 };
 
 export type RemoteServiceErrorInfo = {
   code?: string;
-  message?: string;
-  details?: string;
   data?: Record<string, unknown>;
+  details?: string;
+  message?: string;
   validationErrors?: RemoteServiceValidationErrorInfo[];
 };
 
@@ -2898,39 +2898,39 @@ export type RemoteServiceErrorResponse = {
 };
 
 export type RemoteServiceValidationErrorInfo = {
-  message?: string;
   members?: string[];
+  message?: string;
 };
 
 export type ResetPasswordDto = {
-  userId?: string;
-  resetToken: string;
   password: string;
+  resetToken: string;
+  userId?: string;
 };
 
 export type ResourcePermissionDefinitionDto = {
-  name?: string;
   displayName?: string;
+  name?: string;
 };
 
 export type ResourcePermissionGrantInfoDto = {
-  providerName?: string;
-  providerKey?: string;
-  providerDisplayName?: string;
-  providerNameDisplayName?: string;
   permissions?: GrantedResourcePermissionDto[];
+  providerDisplayName?: string;
+  providerKey?: string;
+  providerName?: string;
+  providerNameDisplayName?: string;
 };
 
 export type ResourcePermissionWithProdiverGrantInfoDto = {
-  name?: string;
   displayName?: string;
-  providers?: string[];
   isGranted?: boolean;
+  name?: string;
+  providers?: string[];
 };
 
 export type ResourceProviderDto = {
-  name?: string;
   displayName?: string;
+  name?: string;
 };
 
 export type ReturnValueApiDescriptionModel = {
@@ -2939,8 +2939,8 @@ export type ReturnValueApiDescriptionModel = {
 };
 
 export type SearchProviderKeyInfo = {
-  providerKey?: string;
   providerDisplayName?: string;
+  providerKey?: string;
 };
 
 export type SearchProviderKeyListResultDto = {
@@ -2948,17 +2948,17 @@ export type SearchProviderKeyListResultDto = {
 };
 
 export type SendPasswordResetCodeDto = {
-  email: string;
   appName: string;
+  email: string;
   returnUrl?: string;
   returnUrlHash?: string;
 };
 
 export type SendTestEmailInput = {
-  senderEmailAddress: string;
-  targetEmailAddress: string;
-  subject: string;
   body?: string;
+  senderEmailAddress: string;
+  subject: string;
+  targetEmailAddress: string;
 };
 
 export type SettingManagementEmailingSendTestEmailUsingPostResponses = {
@@ -3164,23 +3164,23 @@ export type SettingManagementTimezoneUsingPostResponses = {
 };
 
 export type TenantCreateDto = {
-  extraProperties?: Record<string, unknown>;
-  name: string;
   adminEmailAddress: string;
   adminPassword: string;
+  extraProperties?: Record<string, unknown>;
+  name: string;
 };
 
 export type TenantDto = {
+  concurrencyStamp?: string;
   extraProperties?: Record<string, unknown>;
   id?: string;
   name?: string;
-  concurrencyStamp?: string;
 };
 
 export type TenantUpdateDto = {
+  concurrencyStamp?: string;
   extraProperties?: Record<string, unknown>;
   name: string;
-  concurrencyStamp?: string;
 };
 
 export type TimeZone = {
@@ -3194,23 +3194,23 @@ export type TimingDto = {
 
 export type TypeApiDescriptionModel = {
   baseType?: string;
-  isEnum?: boolean;
   enumNames?: string[];
   enumValues?: unknown[];
   genericArguments?: string[];
+  isEnum?: boolean;
   properties?: PropertyApiDescriptionModel[];
 };
 
 export type UpdateEmailSettingsDto = {
-  smtpHost?: string;
-  smtpPort?: number;
-  smtpUserName?: string;
-  smtpPassword?: string;
-  smtpDomain?: string;
-  smtpEnableSsl?: boolean;
-  smtpUseDefaultCredentials?: boolean;
   defaultFromAddress: string;
   defaultFromDisplayName: string;
+  smtpDomain?: string;
+  smtpEnableSsl?: boolean;
+  smtpHost?: string;
+  smtpPassword?: string;
+  smtpPort?: number;
+  smtpUseDefaultCredentials?: boolean;
+  smtpUserName?: string;
 };
 
 export type UpdateFeatureDto = {
@@ -3223,8 +3223,8 @@ export type UpdateFeaturesDto = {
 };
 
 export type UpdatePermissionDto = {
-  name?: string;
   isGranted?: boolean;
+  name?: string;
 };
 
 export type UpdatePermissionsDto = {
@@ -3232,44 +3232,44 @@ export type UpdatePermissionsDto = {
 };
 
 export type UpdateProfileDto = {
-  extraProperties?: Record<string, unknown>;
-  userName?: string;
-  email?: string;
-  name?: string;
-  surname?: string;
-  phoneNumber?: string;
   concurrencyStamp?: string;
+  email?: string;
+  extraProperties?: Record<string, unknown>;
+  name?: string;
+  phoneNumber?: string;
+  surname?: string;
+  userName?: string;
 };
 
 export type UpdateResourcePermissionsDto = {
-  providerName?: string;
-  providerKey?: string;
   permissions?: string[];
+  providerKey?: string;
+  providerName?: string;
 };
 
 export type UserData = {
-  id?: string;
-  tenantId?: string;
-  userName?: string;
-  name?: string;
-  surname?: string;
-  isActive?: boolean;
   email?: string;
   emailConfirmed?: boolean;
+  extraProperties?: Record<string, unknown>;
+  id?: string;
+  isActive?: boolean;
+  name?: string;
   phoneNumber?: string;
   phoneNumberConfirmed?: boolean;
-  extraProperties?: Record<string, unknown>;
+  surname?: string;
+  tenantId?: string;
+  userName?: string;
 };
 
 export type UserLoginInfo = {
-  userNameOrEmailAddress: string;
   password: string;
   rememberMe?: boolean;
+  userNameOrEmailAddress: string;
 };
 
 export type VerifyPasswordResetTokenInput = {
-  userId?: string;
   resetToken: string;
+  userId?: string;
 };
 
 export type WindowsTimeZone = {
