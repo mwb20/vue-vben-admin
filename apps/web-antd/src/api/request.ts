@@ -93,9 +93,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     fulfilled: (response) => {
       const { data: responseData, status } = response;
 
-      const { code, data } = responseData;
-      // abp的application-configuration接口返回数据不包含code，所以code不存在时也视为成功
-      if (status >= 200 && status < 400 && (!code || code === 0)) {
+      if (status >= 200 && status < 400) {
+        const { data } = responseData;
         if (data) {
           return data;
         }
