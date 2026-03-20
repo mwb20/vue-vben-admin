@@ -216,6 +216,10 @@ export type AccountDynamicClaimsRefreshUsingPostResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -278,6 +282,10 @@ export type AccountLogoutUsingGetResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -308,6 +316,10 @@ export type AccountMyProfileChangePasswordUsingPostResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -433,6 +445,10 @@ export type AccountResetPasswordUsingPostResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -463,6 +479,10 @@ export type AccountSendPasswordResetCodeUsingPostResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -615,6 +635,16 @@ export type ControllerInterfaceApiDescriptionModel = {
   methods?: InterfaceMethodApiDescriptionModel[];
 };
 
+export type CreateUpdateDataDictionariesDto = {
+  parentId?: string;
+  code?: string;
+  name?: string;
+  value?: string;
+  sort?: number;
+  isActive?: boolean;
+  description?: string;
+};
+
 export type CurrentCultureDto = {
   displayName?: string;
   englishName?: string;
@@ -650,6 +680,269 @@ export type CurrentUserDto = {
   phoneNumberVerified?: boolean;
   roles?: string[];
   sessionId?: string;
+};
+
+export type DataDictionariesDto = {
+  id?: string;
+  creationTime?: string;
+  creatorId?: string;
+  lastModificationTime?: string;
+  lastModifierId?: string;
+  parentId?: string;
+  code?: string;
+  name?: string;
+  value?: string;
+  sort?: number;
+  isActive?: boolean;
+  hasChildren?: boolean;
+  description?: string;
+};
+
+export type DataDictionaryDictionariesChildrenUsingGetParams = {
+  parentId?: string;
+};
+
+export type DataDictionaryDictionariesChildrenUsingGetResponses = {
+  /**
+   * OK
+   */
+  200: DataDictionariesDto[];
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type DataDictionaryDictionariesIdUsingGetParams = {
+  id: string;
+};
+
+export type DataDictionaryDictionariesIdUsingGetResponses = {
+  /**
+   * OK
+   */
+  200: DataDictionariesDto;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type DataDictionaryDictionariesTreeUsingGetParams = {
+  code?: string;
+};
+
+export type DataDictionaryDictionariesTreeUsingGetResponses = {
+  /**
+   * OK
+   */
+  200: GetDataDictionariesForTreeOutput[];
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type DataDictionaryDictionariesUsingDeleteParams = {
+  id?: string;
+};
+
+export type DataDictionaryDictionariesUsingDeleteResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type DataDictionaryDictionariesUsingGetParams = {
+  Filter?: string;
+  SkipCount?: number;
+  MaxResultCount?: number;
+};
+
+export type DataDictionaryDictionariesUsingGetResponses = {
+  /**
+   * OK
+   */
+  200: PagedResultDto1DataDictionariesDto;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type DataDictionaryDictionariesUsingPostResponses = {
+  /**
+   * OK
+   */
+  200: DataDictionariesDto;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type DataDictionaryDictionariesUsingPutParams = {
+  id?: string;
+};
+
+export type DataDictionaryDictionariesUsingPutResponses = {
+  /**
+   * OK
+   */
+  200: DataDictionariesDto;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
 };
 
 export type DateTimeFormatDto = {
@@ -796,6 +1089,10 @@ export type FeatureManagementFeaturesUsingDeleteResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -868,6 +1165,10 @@ export type FeatureManagementFeaturesUsingPutResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -906,6 +1207,13 @@ export type FindTenantResultDto = {
   isActive?: boolean;
 };
 
+export type GetDataDictionariesForTreeOutput = {
+  code?: string;
+  name?: string;
+  value?: string;
+  hasChildren?: boolean;
+};
+
 export type GetFeatureListResultDto = {
   groups?: FeatureGroupDto[];
 };
@@ -913,6 +1221,27 @@ export type GetFeatureListResultDto = {
 export type GetPermissionListResultDto = {
   entityDisplayName?: string;
   groups?: PermissionGroupDto[];
+};
+
+export type GetResourcePermissionDefinitionListResultDto = {
+  permissions?: ResourcePermissionDefinitionDto[];
+};
+
+export type GetResourcePermissionListResultDto = {
+  permissions?: ResourcePermissionGrantInfoDto[];
+};
+
+export type GetResourcePermissionWithProviderListResultDto = {
+  permissions?: ResourcePermissionWithProdiverGrantInfoDto[];
+};
+
+export type GetResourceProviderListResultDto = {
+  providers?: ResourceProviderDto[];
+};
+
+export type GrantedResourcePermissionDto = {
+  name?: string;
+  displayName?: string;
 };
 
 export type IanaTimeZone = {
@@ -977,6 +1306,10 @@ export type IdentityRolesIdUsingDeleteResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -1337,6 +1670,10 @@ export type IdentityUsersIdRolesUsingPutResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -1371,6 +1708,10 @@ export type IdentityUsersIdUsingDeleteResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -1780,6 +2121,10 @@ export type MultiTenancyTenantsIdDefaultConnectionStringUsingDeleteResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -1851,6 +2196,10 @@ export type MultiTenancyTenantsIdDefaultConnectionStringUsingPutResponses = {
    */
   200: unknown;
   /**
+   * No Content
+   */
+  204: unknown;
+  /**
    * Bad Request
    */
   400: RemoteServiceErrorResponse;
@@ -1885,6 +2234,10 @@ export type MultiTenancyTenantsIdUsingDeleteResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -2060,6 +2413,11 @@ export type ObjectExtensionsDto = {
   enums?: Record<string, ExtensionEnumDto>;
 };
 
+export type PagedResultDto1DataDictionariesDto = {
+  items?: DataDictionariesDto[];
+  totalCount?: number;
+};
+
 export type PagedResultDto1IdentityRoleDto = {
   items?: IdentityRoleDto[];
   totalCount?: number;
@@ -2142,6 +2500,276 @@ export type PermissionManagementPermissionsByGroupUsingGetResponses = {
   501: RemoteServiceErrorResponse;
 };
 
+export type PermissionManagementPermissionsResourceByProviderUsingGetParams = {
+  resourceName?: string;
+  resourceKey?: string;
+  providerName?: string;
+  providerKey?: string;
+};
+
+export type PermissionManagementPermissionsResourceByProviderUsingGetResponses =
+  {
+    /**
+     * OK
+     */
+    200: GetResourcePermissionWithProviderListResultDto;
+    /**
+     * Bad Request
+     */
+    400: RemoteServiceErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: RemoteServiceErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: RemoteServiceErrorResponse;
+    /**
+     * Not Found
+     */
+    404: RemoteServiceErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: RemoteServiceErrorResponse;
+    /**
+     * Not Implemented
+     */
+    501: RemoteServiceErrorResponse;
+  };
+
+export type PermissionManagementPermissionsResourceDefinitionsUsingGetParams = {
+  resourceName?: string;
+};
+
+export type PermissionManagementPermissionsResourceDefinitionsUsingGetResponses =
+  {
+    /**
+     * OK
+     */
+    200: GetResourcePermissionDefinitionListResultDto;
+    /**
+     * Bad Request
+     */
+    400: RemoteServiceErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: RemoteServiceErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: RemoteServiceErrorResponse;
+    /**
+     * Not Found
+     */
+    404: RemoteServiceErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: RemoteServiceErrorResponse;
+    /**
+     * Not Implemented
+     */
+    501: RemoteServiceErrorResponse;
+  };
+
+export type PermissionManagementPermissionsResourceProviderKeyLookupServicesUsingGetParams =
+  {
+    resourceName?: string;
+  };
+
+export type PermissionManagementPermissionsResourceProviderKeyLookupServicesUsingGetResponses =
+  {
+    /**
+     * OK
+     */
+    200: GetResourceProviderListResultDto;
+    /**
+     * Bad Request
+     */
+    400: RemoteServiceErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: RemoteServiceErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: RemoteServiceErrorResponse;
+    /**
+     * Not Found
+     */
+    404: RemoteServiceErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: RemoteServiceErrorResponse;
+    /**
+     * Not Implemented
+     */
+    501: RemoteServiceErrorResponse;
+  };
+
+export type PermissionManagementPermissionsResourceUsingDeleteParams = {
+  resourceName?: string;
+  resourceKey?: string;
+  providerName?: string;
+  providerKey?: string;
+};
+
+export type PermissionManagementPermissionsResourceUsingDeleteResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type PermissionManagementPermissionsResourceUsingGetParams = {
+  resourceName?: string;
+  resourceKey?: string;
+};
+
+export type PermissionManagementPermissionsResourceUsingGetResponses = {
+  /**
+   * OK
+   */
+  200: GetResourcePermissionListResultDto;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type PermissionManagementPermissionsResourceUsingPutParams = {
+  resourceName?: string;
+  resourceKey?: string;
+};
+
+export type PermissionManagementPermissionsResourceUsingPutResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
+  /**
+   * Bad Request
+   */
+  400: RemoteServiceErrorResponse;
+  /**
+   * Unauthorized
+   */
+  401: RemoteServiceErrorResponse;
+  /**
+   * Forbidden
+   */
+  403: RemoteServiceErrorResponse;
+  /**
+   * Not Found
+   */
+  404: RemoteServiceErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: RemoteServiceErrorResponse;
+  /**
+   * Not Implemented
+   */
+  501: RemoteServiceErrorResponse;
+};
+
+export type PermissionManagementPermissionsSearchResourceProviderKeysUsingGetParams =
+  {
+    resourceName?: string;
+    serviceName?: string;
+    filter?: string;
+    page?: number;
+  };
+
+export type PermissionManagementPermissionsSearchResourceProviderKeysUsingGetResponses =
+  {
+    /**
+     * OK
+     */
+    200: SearchProviderKeyListResultDto;
+    /**
+     * Bad Request
+     */
+    400: RemoteServiceErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: RemoteServiceErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: RemoteServiceErrorResponse;
+    /**
+     * Not Found
+     */
+    404: RemoteServiceErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: RemoteServiceErrorResponse;
+    /**
+     * Not Implemented
+     */
+    501: RemoteServiceErrorResponse;
+  };
+
 export type PermissionManagementPermissionsUsingGetParams = {
   providerName?: string;
   providerKey?: string;
@@ -2188,6 +2816,10 @@ export type PermissionManagementPermissionsUsingPutResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -2276,9 +2908,43 @@ export type ResetPasswordDto = {
   password: string;
 };
 
+export type ResourcePermissionDefinitionDto = {
+  name?: string;
+  displayName?: string;
+};
+
+export type ResourcePermissionGrantInfoDto = {
+  providerName?: string;
+  providerKey?: string;
+  providerDisplayName?: string;
+  providerNameDisplayName?: string;
+  permissions?: GrantedResourcePermissionDto[];
+};
+
+export type ResourcePermissionWithProdiverGrantInfoDto = {
+  name?: string;
+  displayName?: string;
+  providers?: string[];
+  isGranted?: boolean;
+};
+
+export type ResourceProviderDto = {
+  name?: string;
+  displayName?: string;
+};
+
 export type ReturnValueApiDescriptionModel = {
   type?: string;
   typeSimple?: string;
+};
+
+export type SearchProviderKeyInfo = {
+  providerKey?: string;
+  providerDisplayName?: string;
+};
+
+export type SearchProviderKeyListResultDto = {
+  keys?: SearchProviderKeyInfo[];
 };
 
 export type SendPasswordResetCodeDto = {
@@ -2300,6 +2966,10 @@ export type SettingManagementEmailingSendTestEmailUsingPostResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -2362,6 +3032,10 @@ export type SettingManagementEmailingUsingPostResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -2459,6 +3133,10 @@ export type SettingManagementTimezoneUsingPostResponses = {
    * OK
    */
   200: unknown;
+  /**
+   * No Content
+   */
+  204: unknown;
   /**
    * Bad Request
    */
@@ -2561,6 +3239,12 @@ export type UpdateProfileDto = {
   surname?: string;
   phoneNumber?: string;
   concurrencyStamp?: string;
+};
+
+export type UpdateResourcePermissionsDto = {
+  providerName?: string;
+  providerKey?: string;
+  permissions?: string[];
 };
 
 export type UserData = {

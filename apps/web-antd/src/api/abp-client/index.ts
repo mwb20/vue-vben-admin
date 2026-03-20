@@ -6,6 +6,7 @@ export * from './abpApplicationConfiguration';
 export * from './abpApplicationLocalization';
 export * from './abpTenant';
 export * from './account';
+export * from './dictionaries';
 export * from './dynamicClaims';
 export * from './emailSettings';
 export * from './features';
