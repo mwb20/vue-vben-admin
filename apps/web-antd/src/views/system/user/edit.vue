@@ -9,6 +9,7 @@ import type {
 
 import { ref } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 
 import { CheckboxGroup, TabPane, Tabs } from 'ant-design-vue';
@@ -26,6 +27,7 @@ import { onAddConfirm, onEditConfirm } from '#/utils/common-methods';
 import { EditFormOptions } from './schema';
 
 const emitReload = defineEmits(['reload']);
+const { hasAccessByCodes } = useAccess();
 const isAdd = ref(true);
 const [EditModal, modalApi] = useVbenModal({
   onOpenChange(isOpen: boolean) {
@@ -110,15 +112,19 @@ function getEditUserRoles(userId: string) {
       <TabPane key="1" tab="用户信息">
         <EditForm />
       </TabPane>
-      <TabPane key="2" tab="角色">
-        <CheckboxGroup
-          v-model:value="checkedRoles"
-          :options="rolesList"
-          name="checkboxgroup"
-          option-label-prop="name"
-          option-value-prop="id"
-        />
-      </TabPane>
+      <template
+        v-if="hasAccessByCodes(['AbpIdentity.Users.Update.ManageRoles'])"
+      >
+        <TabPane key="2" tab="角色">
+          <CheckboxGroup
+            v-model:value="checkedRoles"
+            :options="rolesList"
+            name="checkboxgroup"
+            option-label-prop="name"
+            option-value-prop="id"
+          />
+        </TabPane>
+      </template>
     </Tabs>
   </EditModal>
 </template>
