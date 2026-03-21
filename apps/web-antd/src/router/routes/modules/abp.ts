@@ -34,6 +34,16 @@ const routes: RouteRecordRaw[] = [
           authority: ['AbpIdentity.Roles'],
         },
       },
+      {
+        name: 'dataDictionaryManage',
+        path: '/system/data-dictionaries',
+        component: () => import('#/views/system/data_dictionary/index.vue'),
+        meta: {
+          icon: 'lucide:book-open-text',
+          title: $t('abp.dataDictionaryManage'),
+          authority: ['DataDictionary.DataDictionaries'],
+        },
+      },
     ],
   },
 ];

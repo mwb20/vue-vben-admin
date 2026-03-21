@@ -38,5 +38,6 @@
   "expandAll": "展开全部",
   "collapseAll": "折叠全部",
   "pleaseSelect": "请选择",
-  "roleManage": "角色管理"
+  "roleManage": "角色管理",
+  "dataDictionaryManage": "数据字典管理"
 }
