@@ -2,6 +2,7 @@ import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 import type { DeepPartial } from '@vben/types';
 
 import type { VbenFormProps } from '#/adapter/form';
+
 import { $t } from '@vben/locales';
 
 import { z } from '#/adapter/form';
@@ -65,10 +66,7 @@ export const MainGridOptions: DeepPartial<VxeTableGridOptions<RowType>> = {
     },
   ],
   printConfig: {
-    columns: [
-      { field: 'name' },
-      { field: 'creationTime' },
-    ],
+    columns: [{ field: 'name' }, { field: 'creationTime' }],
   },
   height: 'auto',
   keepSource: true,
@@ -139,10 +137,10 @@ export const EditFormOptions: VbenFormProps = {
         required() {
           return true;
         },
-        if(values){
-            return !values.id;
-        }
-      }
+        if(values) {
+          return !values.id;
+        },
+      },
     },
     {
       component: 'InputPassword',
@@ -156,10 +154,10 @@ export const EditFormOptions: VbenFormProps = {
         required() {
           return true;
         },
-        if(values){
-            // 编辑时不显示
-            return !values.id;
-        }
+        if(values) {
+          // 编辑时不显示
+          return !values.id;
+        },
       },
     },
     {
