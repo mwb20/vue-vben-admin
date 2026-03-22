@@ -35,6 +35,16 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        name: 'tenantManage',
+        path: '/system/tenant',
+        component: () => import('#/views/system/tenant/index.vue'),
+        meta: {
+          icon: 'lucide:book-open-text',
+          title: $t('abp.tenantManage'),
+          authority: ['AbpTenantManagement.Tenants'],
+        },
+      },
+      {
         name: 'dataDictionaryManage',
         path: '/system/data-dictionaries',
         component: () => import('#/views/system/data_dictionary/index.vue'),

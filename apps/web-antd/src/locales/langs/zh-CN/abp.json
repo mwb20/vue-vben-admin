@@ -8,6 +8,7 @@
   "edit": "编辑",
   "delete": "删除",
   "search": "搜索",
+  "query": "查询",
   "save": "保存",
   "export": "导出",
   "isEnable": "是否启用",
@@ -39,5 +40,15 @@
   "collapseAll": "折叠全部",
   "pleaseSelect": "请选择",
   "roleManage": "角色管理",
+  "tenantManage": "租户管理",
+  "tenantName": "租户名称",
+  "inputTenantName": "请输入租户名称",
+  "adminEmailAddress": "管理员邮箱",  
+  "inputAdminEmailAddress": "请输入管理员邮箱",
+  "adminPassword": "管理员密码",
+  "inputAdminPassword": "请输入管理员密码",
+  "confirmPassword": "确认密码",
+  "inputConfirmPassword": "请输入确认密码",
+  "confirmPasswordNotMatch": "两次输入密码不一致",
   "dataDictionaryManage": "数据字典管理"
 }
