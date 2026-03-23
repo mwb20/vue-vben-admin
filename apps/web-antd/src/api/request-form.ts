@@ -48,7 +48,9 @@ function createRequestClient(baseURL: string) {
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
       const errorMessage =
-        responseData?.error_description ?? responseData?.error ?? '';
+        responseData?.error_description ??
+        responseData?.error?.message ??
+        responseData?.error ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
       message.error(errorMessage || msg);
     }),
