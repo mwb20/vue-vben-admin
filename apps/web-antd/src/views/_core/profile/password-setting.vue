@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import type { Recordable } from '@vben/types';
+
 import type { VbenFormSchema } from '#/adapter/form';
+import type { ChangePasswordInput } from '#/api/abp-client/types';
 
 import { computed } from 'vue';
 
@@ -7,10 +10,12 @@ import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
 
+import { changePassword } from '#/api/abp-client/index';
+
 const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
-      fieldName: 'oldPassword',
+      fieldName: 'currentPassword',
       label: '旧密码',
       component: 'VbenInputPassword',
       componentProps: {
@@ -50,8 +55,13 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-function handleSubmit() {
-  message.success('密码修改成功');
+async function handleSubmit(values: Recordable<any>) {
+  try {
+    await changePassword(values as ChangePasswordInput);
+    message.success('密码修改成功');
+  } catch {
+    // 忽略异常
+  }
 }
 </script>
 <template>
