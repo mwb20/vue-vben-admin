@@ -29,12 +29,14 @@ export namespace AuthApi {
  */
 export async function loginApi(data: AuthApi.LoginParams) {
   // Ensure data is a plain object if it's a Proxy
-  const plainData = { ...data };
+  const plainData = {
+    ...data,
+    grant_type: import.meta.env.VITE_LOGIN_GRANT_TYPE,
+    scope: import.meta.env.VITE_LOGIN_SCOPE,
+    client_id: import.meta.env.VITE_LOGIN_CLIENT_ID,
+  };
 
   // Add necessary fields
-  plainData.grant_type = import.meta.env.VITE_LOGIN_GRANT_TYPE;
-  plainData.scope = import.meta.env.VITE_LOGIN_SCOPE;
-  plainData.client_id = import.meta.env.VITE_LOGIN_CLIENT_ID;
 
   return formRequestClient.post<AuthApi.LoginResult>(
     '/connect/token',

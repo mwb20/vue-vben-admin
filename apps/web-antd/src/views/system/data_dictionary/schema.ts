@@ -127,19 +127,17 @@ export const MainGridOptions: DeepPartial<VxeTableGridOptions<RowType>> = {
     lazy: true,
     hasChildField: 'hasChildren',
     showIcon: true,
-    showLine:false,
+    showLine: false,
     indent: 20,
     padding: true,
-    loadMethod: (params: {
-      row: RowType
-    }): Promise<any[]> => {
+    loadMethod: (params: { row: RowType }): Promise<any[]> => {
       const { row } = params;
       return requestClient.get('/api/DataDictionary/Dictionaries/Children', {
         params: {
           parentId: row.id,
         },
       });
-    }
+    },
   },
   height: 'auto',
   keepSource: true,
@@ -202,7 +200,7 @@ export const EditFormOptions: VbenFormProps = {
           }
           return false;
         },
-      }
+      },
     },
     {
       component: 'Input',

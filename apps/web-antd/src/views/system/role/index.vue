@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Page, useVbenModal } from '@vben/common-ui';
+import { $t } from '@vben/locales';
 
 import { Button, message, Space, Tag } from 'ant-design-vue';
 

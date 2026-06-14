@@ -94,7 +94,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: null | UserInfo = null;
+    let userInfo: null | UserInfo;
 
     let config = await getApplicationConfiguration({
       IncludeLocalizationResources: false,

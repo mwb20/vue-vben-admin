@@ -122,9 +122,10 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
       const errorMessage =
-              responseData?.error_description ??
-              responseData?.error?.message ??
-              responseData?.error ?? '';
+        responseData?.error_description ??
+        responseData?.error?.message ??
+        responseData?.error ??
+        '';
       // abp返回的错误信息是一个对象，包含message和details字段
       if (errorMessage && errorMessage.message) {
         message.error(errorMessage.message + (errorMessage.details || ''), 6);

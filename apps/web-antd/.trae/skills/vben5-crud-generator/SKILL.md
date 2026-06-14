@@ -10,6 +10,7 @@ This skill generates standard CRUD management page code for the vue-vben-admin 5
 ## Project Structure
 
 All CRUD pages follow this structure:
+
 ```
 src/views/{module}/{entity}/
 ├── index.vue    # List page with grid and modal
@@ -22,6 +23,7 @@ src/views/{module}/{entity}/
 All UI text MUST use the `$t` function from `@vben/locales` to support internationalization.
 
 ### Import
+
 ```typescript
 import { $t } from '@vben/locales';
 ```
@@ -31,7 +33,7 @@ import { $t } from '@vben/locales';
 From `src/locales/langs/zh-CN/abp.json` and `en-US/abp.json`:
 
 | Key | Chinese | English |
-|-----|---------|---------|
+| --- | --- | --- |
 | abp.search | 搜索 | Search |
 | abp.query | 查询 | Query |
 | abp.add | 新增 | Add |
@@ -142,7 +144,11 @@ export const MainGridOptions: DeepPartial<VxeTableGridOptions<RowType>> = {
           },
         });
       },
-      delete: async () => { return new Promise((resolve) => { resolve([]); }); },
+      delete: async () => {
+        return new Promise((resolve) => {
+          resolve([]);
+        });
+      },
     },
   },
 };
@@ -172,7 +178,12 @@ export const EditFormOptions: VbenFormProps = {
     {
       component: 'Input',
       fieldName: 'id',
-      dependencies: { triggerFields: ['id'], if() { return false; } },
+      dependencies: {
+        triggerFields: ['id'],
+        if() {
+          return false;
+        },
+      },
     },
   ],
   wrapperClass: 'grid-cols-1',
@@ -278,7 +289,9 @@ const [EditModal, modalApi] = useVbenModal({
   onOpenChange(isOpen: boolean) {
     if (isOpen) {
       const value = modalApi.getData<Record<string, string>>();
-      if (!value.id) { return; }
+      if (!value.id) {
+        return;
+      }
       isAdd.value = false;
       getEntity({ id: value.id }).then((res) => {
         editFormApi.setValues(res);
@@ -287,12 +300,22 @@ const [EditModal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     if (isAdd.value) {
-      await onAddConfirm(editFormApi, modalApi, createEntity, emitReload,
-        (data: CreateDto) => data);
+      await onAddConfirm(
+        editFormApi,
+        modalApi,
+        createEntity,
+        emitReload,
+        (data: CreateDto) => data,
+      );
       return;
     }
-    await onEditConfirm(editFormApi, modalApi, updateEntity, emitReload,
-      (data: UpdateDto) => data);
+    await onEditConfirm(
+      editFormApi,
+      modalApi,
+      updateEntity,
+      emitReload,
+      (data: UpdateDto) => data,
+    );
   },
   destroyOnClose: true,
 });
@@ -327,6 +350,7 @@ Located in `src/utils/common-methods.ts`:
 ## Form Component Types
 
 Available components (must be registered in `#/adapter/form`):
+
 - `Input` - Text input
 - `InputPassword` - Password input
 - `InputNumber` - Number input
@@ -342,31 +366,36 @@ Available components (must be registered in `#/adapter/form`):
 ## Common API Patterns
 
 ### List API (with pagination)
+
 ```typescript
 requestClient.get('/api/{entity}', {
-  params: { filter, sorting, skipCount, maxResultCount }
-})
+  params: { filter, sorting, skipCount, maxResultCount },
+});
 // Response: { items: [], totalCount: number }
 ```
 
 ### Get Single
+
 ```typescript
-requestClient.get('/api/{entity}/{id}')
+requestClient.get('/api/{entity}/{id}');
 ```
 
 ### Create
+
 ```typescript
-requestClient.post('/api/{entity}', data)
+requestClient.post('/api/{entity}', data);
 ```
 
 ### Update
+
 ```typescript
-requestClient.put('/api/{entity}', data, { params: { id } })
+requestClient.put('/api/{entity}', data, { params: { id } });
 ```
 
 ### Delete
+
 ```typescript
-requestClient.delete('/api/{entity}', { params: { id } })
+requestClient.delete('/api/{entity}', { params: { id } });
 ```
 
 ## Tree Table Configuration (if needed)

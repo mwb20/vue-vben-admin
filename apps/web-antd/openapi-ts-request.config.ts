@@ -1,3 +1,5 @@
+/* eslint-disable no-template-curly-in-string */
+
 import type { GenerateServiceProps } from 'openapi-ts-request';
 
 const specialTags = new Set([
@@ -8,35 +10,22 @@ const specialTags = new Set([
 ]);
 
 // 特殊Url字典，特殊Url的函数名直接返回字典中的函数名
-const specialUrlMap = new Map<string, string>();
-specialUrlMap.set('/api/account/dynamic-claims/refresh', 'refresh');
-specialUrlMap.set('/api/account/register', 'register');
-specialUrlMap.set('/api/account/reset-password', 'resetPassword');
-specialUrlMap.set(
-  '/api/account/send-password-reset-code',
-  'sendPasswordResetCode',
-);
-specialUrlMap.set(
-  '/api/account/verify-password-reset-token',
-  'verifyPasswordResetToken',
-);
-specialUrlMap.set(
-  '/api/setting-management/emailing/send-test-email',
-  'sendTestEmail',
-);
-specialUrlMap.set('/api/account/check-password', 'checkPassword');
-specialUrlMap.set('/api/account/login', 'login');
-specialUrlMap.set('/api/account/logout', 'logout');
-specialUrlMap.set('/api/account/my-profile/change-password', 'changePassword');
-// eslint-disable-next-line no-template-curly-in-string
-specialUrlMap.set('/api/identity/users/lookup/${param0}', 'userLookupById');
-specialUrlMap.set(
-  // eslint-disable-next-line no-template-curly-in-string
-  '/api/identity/users/lookup/by-username/${param0}',
-  'userLookupByUsername',
-);
-specialUrlMap.set('/api/identity/users/lookup/count', 'userLookupCount');
-specialUrlMap.set('/api/identity/users/lookup/search', 'userLookup');
+const specialUrlMap = new Map<string, string>([
+  ['/api/account/check-password', 'checkPassword'],
+  ['/api/account/dynamic-claims/refresh', 'refresh'],
+  ['/api/account/login', 'login'],
+  ['/api/account/logout', 'logout'],
+  ['/api/account/my-profile/change-password', 'changePassword'],
+  ['/api/account/register', 'register'],
+  ['/api/account/reset-password', 'resetPassword'],
+  ['/api/account/send-password-reset-code', 'sendPasswordResetCode'],
+  ['/api/account/verify-password-reset-token', 'verifyPasswordResetToken'],
+  ['/api/identity/users/lookup/${param0}', 'userLookupById'],
+  ['/api/identity/users/lookup/by-username/${param0}', 'userLookupByUsername'],
+  ['/api/identity/users/lookup/count', 'userLookupCount'],
+  ['/api/identity/users/lookup/search', 'userLookup'],
+  ['/api/setting-management/emailing/send-test-email', 'sendTestEmail'],
+]);
 
 // 获取特殊url的函数名
 function getSpecialUrlFunctionName(api: any) {

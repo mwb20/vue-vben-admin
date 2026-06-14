@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { AccessControl } from '@vben/access';
 import { Page, useVbenModal } from '@vben/common-ui';
+import { $t } from '@vben/locales';
 
 import {
   Button,

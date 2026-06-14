@@ -1,5 +1,3 @@
-import type { ExtendedVxeGridApi } from 'node_modules/@vben/plugins/src/vxe-table/types';
-
 import type { ExtendedFormApi, ExtendedModalApi } from '@vben/common-ui';
 
 import { message, Modal } from 'ant-design-vue';
@@ -108,7 +106,7 @@ export function onEdit(modalApi: ExtendedModalApi, row: any) {
  * @param callApi 删除api
  */
 export function onDel<T>(
-  gridApi: ExtendedVxeGridApi,
+  gridApi: any,
   row: any,
   callApi: (params: T) => Promise<void>,
 ) {
