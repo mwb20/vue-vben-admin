@@ -102,6 +102,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     userInfo = {
       realName: config.currentUser?.name || config.currentUser?.userName || '',
+      username: config.currentUser?.userName || '',
     } as UserInfo;
 
     /* 获取到的用户昵称为空时刷新token，如果刷新失败跳转到登录页面 by mwb 2024年10月27日 */
@@ -122,6 +123,7 @@ export const useAuthStore = defineStore('auth', () => {
           userInfo = {
             realName:
               config.currentUser?.name || config.currentUser?.userName || '',
+            username: config.currentUser?.userName || '',
           } as UserInfo;
         }
       } catch {}

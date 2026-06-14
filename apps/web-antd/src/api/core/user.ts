@@ -11,6 +11,7 @@ export async function getUserInfoApi(): Promise<UserInfo> {
   });
   return {
     realName: config.currentUser?.name || '',
+    username: config.currentUser?.userName || '',
     roles: Object.entries(config.auth?.grantedPolicies || {})
       .filter(([, value]) => value === true) // 过滤出值为 true 的属性
       .map(([key]) => key),
