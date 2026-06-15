@@ -30,7 +30,7 @@ export async function updateUser(
 }
 
 export async function deleteUser(params: API.IdentityUsersIdUsingDeleteParams) {
-  return requestClient.delete(`/api/identity/users/${params.id}`, { params });
+  return requestClient.delete(`/api/identity/users/${params.id}`);
 }
 
 export async function getUserRoles(

@@ -32,9 +32,7 @@ export async function updateTenant(
 export async function deleteTenant(
   params: API.MultiTenancyTenantsIdUsingDeleteParams,
 ) {
-  return requestClient.delete(`/api/multi-tenancy/tenants/${params.id}`, {
-    params,
-  });
+  return requestClient.delete(`/api/multi-tenancy/tenants/${params.id}`);
 }
 
 export async function getTenantDefaultConnectionString(
@@ -60,6 +58,5 @@ export async function deleteTenantDefaultConnectionString(
 ) {
   return requestClient.delete(
     `/api/multi-tenancy/tenants/${params.id}/default-connection-string`,
-    { params },
   );
 }

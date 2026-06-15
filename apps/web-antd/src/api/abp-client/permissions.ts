@@ -60,7 +60,9 @@ export async function getPermissionsResourceDefinitions(
 ): Promise<API.GetResourcePermissionDefinitionListResultDto> {
   return requestClient.get(
     `/api/permission-management/permissions/resource-definitions`,
-    { params },
+    {
+      params,
+    },
   );
 }
 
@@ -78,7 +80,9 @@ export async function getResourceByProvider(
 ): Promise<API.GetResourcePermissionWithProviderListResultDto> {
   return requestClient.get(
     `/api/permission-management/permissions/resource/by-provider`,
-    { params },
+    {
+      params,
+    },
   );
 }
 
@@ -87,6 +91,8 @@ export async function getPermissionsSearchResourceProviderKeys(
 ): Promise<API.SearchProviderKeyListResultDto> {
   return requestClient.get(
     `/api/permission-management/permissions/search-resource-provider-keys`,
-    { params },
+    {
+      params,
+    },
   );
 }

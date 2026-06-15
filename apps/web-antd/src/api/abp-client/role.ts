@@ -30,7 +30,7 @@ export async function updateRole(
 }
 
 export async function deleteRole(params: API.IdentityRolesIdUsingDeleteParams) {
-  return requestClient.delete(`/api/identity/roles/${params.id}`, { params });
+  return requestClient.delete(`/api/identity/roles/${params.id}`);
 }
 
 export async function getRoleAll(): Promise<API.ListResultDto1IdentityRoleDto> {
