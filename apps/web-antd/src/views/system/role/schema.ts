@@ -106,11 +106,6 @@ export const MainGridOptions: DeepPartial<VxeTableGridOptions<RowType>> = {
           },
         });
       },
-      delete: async () => {
-        return new Promise((resolve) => {
-          resolve([]);
-        });
-      },
     },
   },
 };
