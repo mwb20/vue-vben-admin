@@ -1,5 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
-
 import type { GenerateServiceProps } from 'openapi-ts-request';
 
 const specialTags = new Set([
@@ -20,11 +18,11 @@ const specialUrlMap = new Map<string, string>([
   ['/api/account/reset-password', 'resetPassword'],
   ['/api/account/send-password-reset-code', 'sendPasswordResetCode'],
   ['/api/account/verify-password-reset-token', 'verifyPasswordResetToken'],
-  ['/api/identity/users/lookup/${param0}', 'userLookupById'],
-  ['/api/identity/users/lookup/by-username/${param0}', 'userLookupByUsername'],
   ['/api/identity/users/lookup/count', 'userLookupCount'],
   ['/api/identity/users/lookup/search', 'userLookup'],
   ['/api/setting-management/emailing/send-test-email', 'sendTestEmail'],
+  [`/api/identity/users/lookup/\${param0}`, 'userLookupById'],
+  [`/api/identity/users/lookup/by-username/\${param0}`, 'userLookupByUsername'],
 ]);
 
 // 获取特殊url的函数名
@@ -223,7 +221,7 @@ export async function ${functionName}(${params}${bodyParams})${responseType} {
         if (api.method.toUpperCase() === 'DELETE') {
           return `
 export async function ${functionName}(${params}${bodyParams})${responseType} {
-  return requestClient.delete(\`${path}\`${bodyParams ? `, body` : ''}${params ? ', { params, }' : ''})
+  return requestClient.delete(\`${path}\`${bodyParams ? `, body` : ''}${params && api.params.query ? ', { params, }' : ''})
 }`;
         }
         return '';
