@@ -88,10 +88,9 @@ function onPermission(id: string | undefined) {
             {{ $t('abp.edit') }}
           </Button>
           <Dropdown>
-            <a
-              href="javascript:;"
-              class="icon-[material-symbols--more-vert] flex size-4"
-            ></a>
+            <a href="javascript:;" class="flex">
+              <i class="icon-[material-symbols--more] size-8"></i>
+            </a>
             <template #overlay>
               <Menu>
                 <AccessControl
