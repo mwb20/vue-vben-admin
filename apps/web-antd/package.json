@@ -22,7 +22,8 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "openapi": "openapi-ts",
-    "format-api": "prettier --write src/api/abp-client/*.ts"
+    "format-api": "prettier --write src/api/abp-client/*.ts",
+    "format": "vsh lint --format"
   },
   "imports": {
     "#/*": "./src/*"
