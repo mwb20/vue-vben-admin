@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
         path: '/system/users',
         component: () => import('#/views/system/user/index.vue'),
         meta: {
-          icon: 'lucide:copyright',
+          icon: 'lucide:user',
           title: $t('abp.userManage'),
           authority: ['AbpIdentity.Users'],
         },
@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
         path: '/system/roles',
         component: () => import('#/views/system/role/index.vue'),
         meta: {
-          icon: 'lucide:book-open-text',
+          icon: 'carbon:user-role',
           title: $t('abp.roleManage'),
           authority: ['AbpIdentity.Roles'],
         },
@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
         path: '/system/tenant',
         component: () => import('#/views/system/tenant/index.vue'),
         meta: {
-          icon: 'lucide:book-open-text',
+          icon: 'lucide:users',
           title: $t('abp.tenantManage'),
           authority: ['AbpTenantManagement.Tenants'],
         },
@@ -49,7 +49,7 @@ const routes: RouteRecordRaw[] = [
         path: '/system/data-dictionaries',
         component: () => import('#/views/system/data_dictionary/index.vue'),
         meta: {
-          icon: 'lucide:book-open-text',
+          icon: 'material-symbols:dictionary',
           title: $t('abp.dataDictionaryManage'),
           authority: ['DataDictionary.DataDictionaries'],
         },
