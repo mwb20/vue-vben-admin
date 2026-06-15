@@ -33,6 +33,9 @@ export const overridesPreferences = defineOverridesPreferences({
     enable: false, // 是否开启版权信息
     settingShow: false, // 是否开启版权信息设置
   },
+  breadcrumb: {
+    enable: false, // 是否开启面包屑导航
+  },
 });
 
 export const preferencesExtension =
