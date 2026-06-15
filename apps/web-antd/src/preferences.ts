@@ -20,6 +20,18 @@ export const overridesPreferences = defineOverridesPreferences({
   app: {
     name: import.meta.env.VITE_APP_TITLE,
     enableRefreshToken: true, // 是否开启刷新token by mwb 2025年6月2日
+    enableCopyPreferences: false, // 是否开启复制偏好设置
+  },
+  theme: {
+    mode: 'light', // 主题模式
+  },
+  widget: {
+    timezone: false, // 是否开启时区选择器
+    languageToggle: false, // 是否开启语言切换器
+  },
+  copyright: {
+    enable: false, // 是否开启版权信息
+    settingShow: false, // 是否开启版权信息设置
   },
 });
 
